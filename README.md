@@ -59,3 +59,10 @@ colcon build
 source install/setup.bash && source install/setup.sh
 
 ```
+### Run the Node
+
+``` 
+ros2 bag play (dataset folder) or camera node
+ros2 run vins vins_node (your config path)
+
+```
