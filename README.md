@@ -81,6 +81,9 @@ ros2 run vins vins_node /home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-
 
 ros2 launch rtabmap_launch rtabmap.launch.py     rtabmap_args:="--delete_db_on_start"     rgb_topic:=/camera/camera/color/image_raw     camera_info_topic:=/camera/camera/color/camera_info     odom_topic:=/odometry     approx_sync:=true     depth:=false     visual_odometry:=false #optional
 
-python3 aero_vins.py
 
 ```
+
+### for ardupilot 
+
+``` python3 aero_vins.py ```
