@@ -31,6 +31,7 @@ cd ceres-solver
 git checkout 2.1.0   # recommended stable
 
 ```
+
 #### Configure with CUDA ENABLED
 
 ```
@@ -48,6 +49,29 @@ sudo make install
 sudo ldconfig
 
 ```
+
+### Install Opencv 
+```
+git clone https://github.com/opencv/opencv_contrib/
+cd opencv_contrib
+git checkout 4.8.0
+cd ..
+git clone https://github.com/opencv/opencv/
+cd opencv
+git checkout 4.8.0
+mkdir opencv/build/
+cd opencv/build/
+cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
+make -j8
+sudo make install
+
+```
+
+### Install ROS2-Humble
+
+https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
+
+
 ### clone the repo
 
 ``` cd (your workspace)/src
@@ -86,4 +110,7 @@ ros2 launch rtabmap_launch rtabmap.launch.py     rtabmap_args:="--delete_db_on_s
 
 ### for ardupilot 
 
-``` python3 aero_vins.py ```
+``` 
+python3 aero_vins.py 
+
+```
