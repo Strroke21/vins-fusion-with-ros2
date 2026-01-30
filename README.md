@@ -59,10 +59,25 @@ colcon build
 source install/setup.bash && source install/setup.sh
 
 ```
-### Run the Node
+### Run the Node (for dataset)
 
 ``` 
-ros2 bag play (dataset folder) or camera node
+ros2 bag play (dataset folder) 
 ros2 run vins vins_node (your config path)
+ros2 launch vins vins_rviz.launch.xml
 
+```
+### for camera (realsense)
+
+```
+ros2 launch realsense2_camera rs_launch.py \
+enable_infra1:=true enable_infra2:=true enable_color:=true enable_sync:=true \
+rgb_camera.color_profile:=640,480,30 \
+enable_sync:=true enable_gyro:=true enable_accel:=true \
+unite_imu_method:=2 gyro_fps:=200 accel_fps:=200 \
+depth_module.infra_profile:=640,480,90
+
+ros2 run vins vins_node /home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/config/realsense_d435i/realsense_stereo_imu_config.yaml
+
+ros2 launch vins vins_rviz.launch.xml
 ```
