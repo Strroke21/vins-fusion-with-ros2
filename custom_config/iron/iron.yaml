@@ -1,0 +1,104 @@
+%YAML:1.0
+
+# =========================================================
+# common parameters
+# support: 1 imu 1 cam; 1 imu 2 cam: 2 cam;
+# =========================================================
+imu: 1
+num_of_cam: 2
+
+imu_topic: "/imu0"
+image0_topic: "/cam0/image_raw"
+image1_topic: "/cam1/image_raw"
+
+output_path: "/home/deathstroke/output/"
+
+cam0_calib: "left.yaml"
+cam1_calib: "right.yaml"
+
+image_width: 640
+image_height: 480
+
+
+# =========================================================
+# GPU acceleration
+# =========================================================
+use_gpu: 0
+use_gpu_acc_flow: 0
+use_gpu_ceres: 0
+
+
+# =========================================================
+# Extrinsic parameter between IMU and Camera
+# Using your Kalibr T_imu_cam values
+# =========================================================
+estimate_extrinsic: 0
+
+body_T_cam0: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ 0.99992127, -0.0078594,  0.0097819,  -0.05845078,
+           0.00784873,  0.99996856, 0.00112822, -0.00728728,
+          -0.00979046, -0.00105136, 0.99995152,  0.0623674,
+           0., 0., 0., 1. ]
+
+body_T_cam1: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ 0.99995933,  0.00327998, 0.00840069,  0.00793529,
+          -0.00328309,  0.99999455, 0.000356,   -0.00716413,
+          -0.00839948, -0.00038357, 0.99996465,  0.06245421,
+           0., 0., 0., 1. ]
+
+
+# =========================================================
+# Multiple thread support
+# =========================================================
+multiple_thread: 1
+
+
+# =========================================================
+# Feature tracker parameters
+# =========================================================
+max_cnt: 150
+min_dist: 30
+freq: 15
+F_threshold: 1.0
+show_track: 1
+flow_back: 1
+
+
+# =========================================================
+# Optimization parameters
+# =========================================================
+max_solver_time: 0.04
+max_num_iterations: 8
+keyframe_parallax: 10.0
+
+
+# =========================================================
+# IMU parameters (from your Kalibr — much better than defaults)
+# =========================================================
+acc_n: 0.00270529319
+gyr_n: 0.000111868308
+acc_w: 0.000130545682
+gyr_w: 0.000000899753
+g_norm: 9.80114
+
+
+# =========================================================
+# Unsynchronization parameters
+# =========================================================
+estimate_td: 1
+td: 0.00621
+
+
+# =========================================================
+# Loop closure parameters
+# =========================================================
+load_previous_pose_graph: 0
+pose_graph_save_path: "/home/deathstroke/output/pose_graph/"
+save_image: 0
+
