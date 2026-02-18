@@ -62,7 +62,7 @@ git checkout 4.8.0
 mkdir opencv/build/
 cd opencv/build/
 cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
-make -j8
+make -j$(nproc)
 sudo make install
 
 ```
@@ -76,7 +76,7 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 
 ``` cd (your workspace)/src
 
-git clone https://github.com/JanekDev/VINS-Fusion-ROS2-humble-arm
+git clone https://github.com/zinuok/VINS-Fusion-ROS2
 
 cd ..
 colcon build
