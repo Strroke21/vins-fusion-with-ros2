@@ -54,28 +54,27 @@ sudo ldconfig
 ```
 git clone https://github.com/opencv/opencv_contrib/
 cd opencv_contrib
-git checkout 4.8.0
+git checkout 4.10.0
 cd ..
 git clone https://github.com/opencv/opencv/
 cd opencv
-git checkout 4.8.0
+git checkout 4.10.0
 mkdir opencv/build/
 cd opencv/build/
+
 cmake \
 -D CMAKE_BUILD_TYPE=Release \
 -D CMAKE_INSTALL_PREFIX=/usr/local \
 -D WITH_CUDA=ON \
+-D BUILD_TESTS=OFF \
+-D BUILD_PERF_TESTS=OFF \
 -D OPENCV_DNN_CUDA=OFF \
--D WITH_CUDNN=OFF \
--D ENABLE_FAST_MATH=1 \
--D CUDA_FAST_MATH=1 \
--D WITH_CUBLAS=1 \
--D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
 -D CUDA_ARCH_BIN=8.9 \
--D CUDA_ARCH_PTX=8.9 \
+-D CUDA_NVCC_FLAGS="--expt-relaxed-constexpr" \
+-D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
 ..
 
-make -j$(nproc)
+make -j8
 sudo make install
 
 ```
@@ -89,10 +88,11 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 
 ``` cd (your workspace)/src
 
-git clone https://github.com/zinuok/VINS-Fusion-ROS2
+git clone https://github.com/JanekDev/VINS-Fusion-ROS2-humble-arm
 
 cd ..
-colcon build
+ colcon build   --cmake-args   -DCMAKE_PREFIX_PATH=/usr/local   -DOpenCV_DIR=/usr/local/lib/cmake/opencv4   -DCMAKE_BUILD_TYPE=Release
+
 source install/setup.bash && source install/setup.sh
 
 ```
