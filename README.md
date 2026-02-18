@@ -61,7 +61,17 @@ cd opencv
 git checkout 4.8.0
 mkdir opencv/build/
 cd opencv/build/
-cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
+cmake \
+ -D CMAKE_BUILD_TYPE=Release \
+ -D CMAKE_INSTALL_PREFIX=/usr/local \
+ -D WITH_CUDA=ON \
+ -D OPENCV_DNN_CUDA=OFF \
+ -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+ -D ENABLE_FAST_MATH=1 \
+ -D CUDA_FAST_MATH=1 \
+ -D WITH_CUBLAS=1 \
+ ..
+
 make -j$(nproc)
 sudo make install
 
