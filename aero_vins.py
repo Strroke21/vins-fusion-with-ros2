@@ -154,7 +154,7 @@ class SlamLocalization(Node):
         self.prev_pos = None
         self.prev_att = None
         self.prev_time = None
-        self.create_timer(0.025, self.timer_callback)
+        self.create_timer(0.025, self.timer_callback) # 40 Hz
         if compass_enabled == 1:
             self.initial_compass_yaw = math.radians(get_heading(vehicle)) #yaw in radians 
             self.get_logger().info(f"Initial yaw offset (deg): {math.degrees(self.initial_compass_yaw)}")
