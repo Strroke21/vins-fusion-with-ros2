@@ -1,2 +1,1 @@
-source;share/global_fusion/environment/ament_prefix_path.sh
-source;share/global_fusion/environment/path.sh
+/home/deathstroke/vins-fusion-ros2/build/global_fusion/ament_cmake_environment_hooks/local_setup.dsv

@@ -6,5 +6,5 @@ CXX_DEFINES = -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPT
 
 CXX_INCLUDES = -I/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/include -isystem /usr/local/include/opencv4 -isystem /usr/local/include/eigen3
 
-CXX_FLAGS = -O3 -DNDEBUG -Wextra -Wpedantic -std=gnu++14
+CXX_FLAGS = -Wextra -Wpedantic -std=gnu++14
 

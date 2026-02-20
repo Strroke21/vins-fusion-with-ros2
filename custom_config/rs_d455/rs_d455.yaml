@@ -2,8 +2,8 @@
 
 #common parameters
 #support: 1 imu 1 cam; 1 imu 2 cam: 2 cam; 
-imu: 1         
-num_of_cam: 2
+imu: 1        
+num_of_cam: 2  
 
 imu_topic: "/camera/camera/imu"
 image0_topic: "/camera/camera/infra1/image_rect_raw"
@@ -69,6 +69,7 @@ gyr_n: 0.0125         # gyroscope measurement noise standard deviation.     #0.0
 acc_w: 0.2836        # accelerometer bias random work noise standard deviation.  #0.002
 gyr_w: 0.1193       # gyroscope bias random work noise standard deviation.     #4.0e-5
 g_norm: 9.805         # gravity magnitude
+
 
 #unsynchronization parameters
 estimate_td: 1                      # online estimate time offset between camera and imu

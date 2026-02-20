@@ -1,19 +1,19 @@
 Determining if the function sgemm_ exists failed with the following output:
 Change Dir: /home/deathstroke/vins-fusion-ros2/build/global_fusion/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c8ffb/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c8ffb.dir/build.make CMakeFiles/cmTC_c8ffb.dir/build
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_caeaa/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_caeaa.dir/build.make CMakeFiles/cmTC_caeaa.dir/build
 gmake[1]: Entering directory '/home/deathstroke/vins-fusion-ros2/build/global_fusion/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_c8ffb.dir/CheckFunctionExists.c.o
-/usr/lib/ccache/cc   -DCHECK_FUNCTION_EXISTS=sgemm_ -o CMakeFiles/cmTC_c8ffb.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
-Linking C executable cmTC_c8ffb
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c8ffb.dir/link.txt --verbose=1
-/usr/lib/ccache/cc  -DCHECK_FUNCTION_EXISTS=sgemm_ CMakeFiles/cmTC_c8ffb.dir/CheckFunctionExists.c.o -o cmTC_c8ffb 
-/usr/bin/ld: CMakeFiles/cmTC_c8ffb.dir/CheckFunctionExists.c.o: in function `main':
+Building C object CMakeFiles/cmTC_caeaa.dir/CheckFunctionExists.c.o
+/usr/lib/ccache/cc   -DCHECK_FUNCTION_EXISTS=sgemm_ -o CMakeFiles/cmTC_caeaa.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_caeaa
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_caeaa.dir/link.txt --verbose=1
+/usr/lib/ccache/cc  -DCHECK_FUNCTION_EXISTS=sgemm_ CMakeFiles/cmTC_caeaa.dir/CheckFunctionExists.c.o -o cmTC_caeaa 
+/usr/bin/ld: CMakeFiles/cmTC_caeaa.dir/CheckFunctionExists.c.o: in function `main':
 CheckFunctionExists.c:(.text+0x14): undefined reference to `sgemm_'
 collect2: error: ld returned 1 exit status
-gmake[1]: *** [CMakeFiles/cmTC_c8ffb.dir/build.make:99: cmTC_c8ffb] Error 1
+gmake[1]: *** [CMakeFiles/cmTC_caeaa.dir/build.make:99: cmTC_caeaa] Error 1
 gmake[1]: Leaving directory '/home/deathstroke/vins-fusion-ros2/build/global_fusion/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_c8ffb/fast] Error 2
+gmake: *** [Makefile:127: cmTC_caeaa/fast] Error 2
 
 
 
