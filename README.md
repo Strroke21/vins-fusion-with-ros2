@@ -88,7 +88,7 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 
 ``` cd (your workspace)/src
 
-git clone https://github.com/JanekDev/VINS-Fusion-ROS2-humble-arm
+git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
 cd ..
 
