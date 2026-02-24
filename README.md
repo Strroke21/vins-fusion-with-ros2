@@ -9,7 +9,7 @@
   - Ubuntu 22.04
   - ROS2 Humble
 
-### Install Ceres-Solver with CUDA (Optional)
+### Install Ceres-Solver with CUDA
 #### Install dependencies
 ``` 
 sudo apt install -y \
@@ -38,11 +38,7 @@ git checkout 2.1.0   # recommended stable
 mkdir build && cd build
 
 cmake .. \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCERES_USE_CUDA=ON \
-  -DCERES_USE_OPENMP=ON \
-  -DBUILD_TESTING=OFF \
-  -DBUILD_EXAMPLES=OFF
+  -DCMAKE_BUILD_TYPE=Release
 
 make -j$(nproc)
 sudo make install
@@ -74,7 +70,7 @@ cmake \
 -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
 ..
 
-make -j8
+make -j4
 sudo make install
 
 ```
