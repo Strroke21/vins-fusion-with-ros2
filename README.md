@@ -9,7 +9,7 @@
   - Ubuntu 22.04
   - ROS2 Humble
 
-### Install Ceres-Solver with CUDA
+### Install Ceres-Solver with CUDA (Optional)
 #### Install dependencies
 ``` 
 sudo apt install -y \
@@ -50,7 +50,7 @@ sudo ldconfig
 
 ```
 
-### Install Opencv 
+### Install Opencv with CUDA (Essential)
 ```
 git clone https://github.com/opencv/opencv_contrib/
 cd opencv_contrib
