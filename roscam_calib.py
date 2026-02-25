@@ -184,3 +184,6 @@ def main():
 
 if __name__=="__main__":
     main()
+
+    
+    #python3 roscam_calib.py --topic /camera/image_raw --square 20 --num 20 --width 640 --height 480 --yaml ~/calib.yaml
