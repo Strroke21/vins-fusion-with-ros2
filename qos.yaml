@@ -1,9 +1,0 @@
-realsense2_camera:
-  ros__parameters:
-    qos_overrides:
-      imu:
-        publisher:
-          reliability: reliable
-          history: keep_last
-          depth: 2000
-          durability: volatile
