@@ -1,1 +1,0 @@
-/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/include/camodocal/chessboard/Spline.h

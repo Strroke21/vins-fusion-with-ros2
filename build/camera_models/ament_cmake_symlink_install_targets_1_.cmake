@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/deathstroke/vins-fusion-ros2/build/camera_models/Calibrations" "/home/deathstroke/vins-fusion-ros2/build/camera_models/libcamera_models.a" "TARGETS" "Calibrations" "camera_models" "ARCHIVE_DESTINATION" "lib" "LIBRARY_DESTINATION" "lib" "RUNTIME_DESTINATION" "bin")
