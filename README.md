@@ -129,10 +129,6 @@ python3 aero_vins.py
 ```
 ### Flight Test
 
-<details>
-  <summary>▶️ <b>Watch Demo Video</b></summary>
-  <br>
-  <video src="https://drive.google.com/uc?export=download&id=1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt" width="100%" controls>
-    Your browser does not support the video tag.
-  </video>
-</details>
+<video width="100%" controls poster="https://your-image-url.com/thumbnail.png">
+  <source src="https://drive.google.com/uc?export=download&id=1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt" type="video/mp4">
+</video>
