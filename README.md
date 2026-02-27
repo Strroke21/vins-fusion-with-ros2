@@ -129,4 +129,4 @@ python3 aero_vins.py
 ```
 ### Flight Test
 
-[![Watch the video](SLAM.jpg)](https://drive.google.com/file/d/1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt/preview)
+[![Watch the video](SLAM.png)](https://drive.google.com/file/d/1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt/preview)
