@@ -137,7 +137,7 @@ python3 aero_vins.py
     controls 
     poster="https://your-repo-path/SLAM.png" 
     style="border-radius: 10px; border: 1px solid #30363d;">
-    <source src="https://drive.google.com/uc?export=download&id=1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt" type="video/mp4">
+    <source src="https://drive.google.com/file/d/1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt/view?usp=drive_link" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 </details>
