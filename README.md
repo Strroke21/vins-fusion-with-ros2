@@ -129,15 +129,4 @@ python3 aero_vins.py
 ```
 ### Flight Test
 
-<details open>
-  <summary><b>🛰️ SLAM Demo Portfolio</b></summary>
-  <br>
-  <video 
-    width="100%" 
-    controls 
-    poster="https://your-repo-path/SLAM.png" 
-    style="border-radius: 10px; border: 1px solid #30363d;">
-    <source src="https://drive.google.com/file/d/1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt/view?usp=drive_link" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</details>
+[![Watch the video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://drive.google.com/file/d/1Q1i9fy6b75TaGaKeJ7mhqQjBl9eKBurt/preview)
