@@ -90,7 +90,9 @@ cd vins-fusion-with-ros2
 
 colcon build   --cmake-args   -DCMAKE_PREFIX_PATH=/usr/local   -DOpenCV_DIR=/usr/local/lib/cmake/opencv4   -DCMAKE_BUILD_TYPE=Release
 
-source install/setup.bash && source install/setup.sh
+echo "source /opt/ros/humble/bin/ros2" >> ~/.bashrc
+echo "source ~/vins-fusion-with-ros2/install/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 
 ```
 ### Run the Node (for dataset)
