@@ -86,7 +86,7 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 
 git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
-cd ..
+cd vins-fusion-with-ros2
 
 colcon build   --cmake-args   -DCMAKE_PREFIX_PATH=/usr/local   -DOpenCV_DIR=/usr/local/lib/cmake/opencv4   -DCMAKE_BUILD_TYPE=Release
 
