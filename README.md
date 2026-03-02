@@ -55,8 +55,8 @@ cd ..
 git clone https://github.com/opencv/opencv/
 cd opencv
 git checkout 4.10.0
-mkdir opencv/build/
-cd opencv/build/
+mkdir build/
+cd build/
 
 cmake \
 -D CMAKE_BUILD_TYPE=Release \
