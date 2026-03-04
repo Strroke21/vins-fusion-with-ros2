@@ -19,7 +19,7 @@ sudo apt install -y \
   libgflags-dev \
   libatlas-base-dev \
   libsuitesparse-dev \
-  libeigen3-dev
+  libeigen3-dev libcudnn8-dev
 
 ```
 #### Clone Ceres Solver
@@ -72,6 +72,7 @@ cmake \
 ..
 
 # CUDA_ARCH_BIN=8.9 for x86 arch
+# CUDA_ARCH_BIN=8.7 for ARM arch
 
 make -j4
 sudo make install
