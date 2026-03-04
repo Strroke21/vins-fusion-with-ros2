@@ -117,9 +117,9 @@ enable_sync:=true enable_gyro:=true enable_accel:=true \
 unite_imu_method:=2 gyro_fps:=200 accel_fps:=200 \
 depth_module.infra_profile:=640,480,90
 
-ros2 run vins vins_node /home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/config/realsense_d435i/realsense_stereo_imu_config.yaml
+ros2 run vins vins_node ~/vins-fusion-ros2/custom_config/rs_d455/rs_d455.yaml
 
-ros2 run loop_fusion loop_fusion_node /home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/config/realsense_d435i/realsense_stereo_imu_config.yaml #optional for loop closure
+ros2 run loop_fusion loop_fusion_node ~/vins-fusion-ros2/custom_config/rs_d455/rs_d455.yaml #optional for loop closure
 
 ros2 launch rtabmap_launch rtabmap.launch.py     rtabmap_args:="--delete_db_on_start"     rgb_topic:=/camera/camera/color/image_raw     camera_info_topic:=/camera/camera/color/camera_info     odom_topic:=/odometry     approx_sync:=true     depth:=false     visual_odometry:=false 
 
