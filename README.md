@@ -62,7 +62,7 @@ cmake \
 -D CMAKE_BUILD_TYPE=Release \
 -D CMAKE_INSTALL_PREFIX=/usr/local \
 -D WITH_CUDA=ON \
--D CUDA_ARCH_BIN=8.7 \ # 8.9 for x86 arch
+-D CUDA_ARCH_BIN=8.7 \
 -D CUDA_ARCH_PTX="" \
 -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
 -D WITH_CUDNN=ON \
@@ -70,6 +70,8 @@ cmake \
 -D ENABLE_FAST_MATH=1 \
 -D CUDA_FAST_MATH=1 \
 ..
+
+# CUDA_ARCH_BIN=8.9 for x86 arch
 
 make -j4
 sudo make install
