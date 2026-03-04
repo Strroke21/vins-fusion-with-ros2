@@ -19,7 +19,7 @@ sudo apt install -y \
   libgflags-dev \
   libatlas-base-dev \
   libsuitesparse-dev \
-  libeigen3-dev libcudnn8-dev
+  libeigen3-dev
 
 ```
 #### Clone Ceres Solver
