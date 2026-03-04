@@ -8,7 +8,7 @@ num_of_cam: 2
 imu_topic: "/camera/camera/imu"
 image0_topic: "/camera/camera/infra1/image_rect_raw"
 image1_topic: "/camera/camera/infra2/image_rect_raw"
-output_path: "/home/deathstroke/output/"
+output_path: "/home/deathstroke/output"
 
 cam0_calib: "left.yaml"
 cam1_calib: "right.yaml"
@@ -16,13 +16,13 @@ image_width: 640
 image_height: 480
 
 # GPU acceleration
-use_gpu         : 0
+use_gpu         : 1
 use_gpu_acc_flow: 1
 use_gpu_ceres   : 0
    
 
 # Extrinsic parameter between IMU and Camera.
-estimate_extrinsic: 1   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
+estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
                         # 1  Have an initial guess about extrinsic parameters. We will optimize around your initial guess.
 
 body_T_cam0: !!opencv-matrix

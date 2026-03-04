@@ -130,7 +130,7 @@ ros2 launch rtabmap_launch rtabmap.launch.py     rtabmap_args:="--delete_db_on_s
 ### for ardupilot 
 
 ``` 
-python3 aero_vins.py 
+python3 aero_vins.py #update in progress 
 
 ```
 ### Flight Test Video
