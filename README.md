@@ -88,7 +88,7 @@ git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
 cd vins-fusion-with-ros2
 
-colcon build   --cmake-args   -DCMAKE_PREFIX_PATH=/usr/local   -DOpenCV_DIR=/usr/local/lib/cmake/opencv4   -DCMAKE_BUILD_TYPE=Release
+colcon build 
 
 echo "source /opt/ros/humble/bin/ros2" >> ~/.bashrc
 echo "source ~/vins-fusion-with-ros2/install/setup.bash" >> ~/.bashrc
