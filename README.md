@@ -62,12 +62,13 @@ cmake \
 -D CMAKE_BUILD_TYPE=Release \
 -D CMAKE_INSTALL_PREFIX=/usr/local \
 -D WITH_CUDA=ON \
--D BUILD_TESTS=OFF \
--D BUILD_PERF_TESTS=OFF \
--D OPENCV_DNN_CUDA=OFF \
--D CUDA_ARCH_BIN=8.9 \
--D CUDA_NVCC_FLAGS="--expt-relaxed-constexpr" \
--D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+-D CUDA_ARCH_BIN=8.7 \
+-D CUDA_ARCH_PTX="" \
+-D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+-D WITH_CUDNN=ON \
+-D OPENCV_DNN_CUDA=ON \
+-D ENABLE_FAST_MATH=1 \
+-D CUDA_FAST_MATH=1 \
 ..
 
 make -j4
