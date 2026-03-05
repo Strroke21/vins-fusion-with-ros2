@@ -1,5 +1,5 @@
 
-# VINS-Fusion (GPU enabled)
+# VINS-Fusion
 
 ## VINS-Fusion with ROS2-Humble
 
