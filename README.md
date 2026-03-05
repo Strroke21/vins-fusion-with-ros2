@@ -115,7 +115,7 @@ enable_infra1:=true enable_infra2:=true enable_color:=true \
 rgb_camera.color_profile:=640,480,30 \
 enable_sync:=true enable_gyro:=true enable_accel:=true \
 unite_imu_method:=2 gyro_fps:=200 accel_fps:=200 \
-depth_module.infra_profile:=640,480,90
+depth_module.infra_profile:=640,480,60
 
 ros2 run vins vins_node ~/vins-fusion-with-ros2/custom_config/rs_d455/rs_d455.yaml
 
