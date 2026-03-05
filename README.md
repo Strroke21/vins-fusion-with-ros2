@@ -51,6 +51,8 @@ sudo ldconfig
 git clone https://github.com/opencv/opencv.git -b 4.8.0 --depth 1
 git clone https://github.com/opencv/opencv_contrib.git -b 4.8.0 --depth 1
 
+cd opencv
+
 mkdir build/
 cd build/
 
