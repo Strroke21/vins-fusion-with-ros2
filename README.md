@@ -117,7 +117,7 @@ ros2 run vins vins_node (your config path)
 ros2 launch vins vins_rviz.launch.xml
 
 ```
-### for camera (realsense)
+### for camera (realsense) #30fps is ideal (note: 60 fps leads to lag in computation)
 
 ```
 ros2 launch realsense2_camera rs_launch.py enable_infra1:=true enable_infra2:=true enable_color:=true enable_sync:=true rgb_camera.color_profile:=640,480,30 enable_gyro:=true enable_accel:=true unite_imu_method:=2 gyro_fps:=200 accel_fps:=200 depth_module.infra_profile:=640,480,30
