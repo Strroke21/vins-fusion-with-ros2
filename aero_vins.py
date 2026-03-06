@@ -39,8 +39,8 @@ use_rangefinder = 1  # Set to 1 to use rangefinder data for altitude correction
 
 if camera_orientation == 0:
     H_aeroRef_camRef = np.array([
-    [1,  0,  0, 0],   # X forward --> forward
-    [0, -1,  0, 0],   # Y left --> right
+    [0,  1,  0, 0],   # X forward --> forward
+    [1,  0,  0, 0],   # Y left --> right
     [0,  0, -1, 0],   # Z up --> down
     [0,  0,  0, 1]
     ])
@@ -49,26 +49,24 @@ if camera_orientation == 0:
 elif camera_orientation == 1:  # downfacing (90° pitch down)
     H_aeroRef_camRef = np.array([
     [0,  0, 1, 0],   
-    [0, -1, 0, 0],  
-    [1, 0,  0,  0],   
-    [0,  0,  0, 1]
+    [1, 0, 0,  0],  
+    [0, 1,  0, 0],   
+    [0, 0,  0, 1]
     ])
     H_cambody_aeroBody = H_aeroRef_camRef
 
 elif camera_orientation == 2: # 45 degree tilted down forward
     c = math.sqrt(2)/2
     H_aeroRef_camRef = np.array([
-    [c, 0, c, 0],   # X forward --> forward
-    [0, -1, 0, 0],   # Y left --> right
-    [c, 0, -c, 0],   # Z up --> down
+    [0, c, c, 0],   # Y forward --> X forward
+    [1, 0, 0, 0],   # X right --> Y right
+    [0, c, -c, 0],   # Z up --> Z down
     [0,  0,  0, 1]
     ])
-    H_cambody_aeroBody = np.linalg.inv(H_aeroRef_camRef)
-
 else:
     H_aeroRef_camRef = np.array([
-    [1,  0,  0, 0],   # X forward --> forward
-    [0, -1,  0, 0],   # Y left --> right
+    [0,  1,  0, 0],   # X forward --> forward
+    [1,  0,  0, 0],   # Y left --> right
     [0,  0, -1, 0],   # Z up --> down
     [0,  0,  0, 1]
     ])
