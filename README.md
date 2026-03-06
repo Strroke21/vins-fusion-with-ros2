@@ -11,6 +11,13 @@
 
 ### Install Ceres-Solver with CUDA
 #### Install dependencies
+
+#### Remove opencv4.5 as it conflicts with 4.8 
+```
+sudo apt purge 'libopencv*'
+
+```
+
 ``` 
 sudo apt install -y \
   cmake \
@@ -21,6 +28,8 @@ sudo apt install -y \
   libsuitesparse-dev \
   libeigen3-dev
 
+sudo apt install ros-humble-vision-opencv
+
 ```
 #### Clone Ceres Solver
 
@@ -29,6 +38,23 @@ cd ~
 git clone https://github.com/ceres-solver/ceres-solver.git
 cd ceres-solver
 git checkout 2.1.0   # recommended stable
+
+```
+### install Cv bridge
+
+```
+# Create a ROS 2 workspace if you don’t have one
+mkdir -p ~/ros2_ws/src
+
+cd ~/ros2_ws/src
+git clone -b humble https://github.com/ros-perception/vision_opencv.git
+
+cd ..
+colcon build --symlink-install --cmake-args -DOpenCV_DIR=/usr/local/share/opencv4
+
+echo -e '\nexport OpenCV_DIR=/usr/local/share/opencv4\nexport LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+
+echo 'source ~/ros_ws/install/setup.bash' >> ~/.bashrc
 
 ```
 
