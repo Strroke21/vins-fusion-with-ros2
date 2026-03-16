@@ -63,6 +63,8 @@ elif camera_orientation == 2: # 45 degree tilted down forward
     [0, c, -c, 0],   # Z up --> Z down
     [0,  0,  0, 1]
     ])
+    H_cambody_aeroBody = H_aeroRef_camRef
+
 else:
     H_aeroRef_camRef = np.array([
     [0,  1,  0, 0],   # X forward --> forward
