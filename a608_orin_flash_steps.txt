@@ -1,0 +1,82 @@
+
+Clean Flash Instructions for A608 Carrier + Jetson Orin (JetPack 6.1 / L4T 36.4.4)
+
+Files required in the same folder:
+- A608_Jetpack_6.1.tar.gz
+- Jetson_Linux_R36.4.4_aarch64.tbz2
+- Tegra_Linux_Sample-Root-Filesystem_R36.4.4_aarch64.tbz2
+
+
+1) Extract Jetson Linux BSP
+
+tar xf Jetson_Linux_R36.4.4_aarch64.tbz2
+
+
+2) Extract root filesystem
+
+sudo tar xpf Tegra_Linux_Sample-Root-Filesystem_R36.4.4_aarch64.tbz2 -C Linux_for_Tegra/rootfs
+
+
+3) Apply NVIDIA binaries
+
+cd Linux_for_Tegra
+sudo ./apply_binaries.sh
+
+
+4) Install A608 board support package
+
+cd ..
+sudo tar xf A608_Jetpack_6.1.tar.gz -C Linux_for_Tegra
+
+
+5) Verify rootfs size
+
+sudo du -sh Linux_for_Tegra/rootfs
+
+Expected: ~4–6 GB
+
+
+6) Enter Linux_for_Tegra directory
+
+cd Linux_for_Tegra
+
+
+7) Put Jetson into recovery mode
+
+Connect USB-C cable and run:
+
+lsusb
+
+Expected output contains:
+NVIDIA Corp. APX
+
+
+8) Flash A608 + Orin to NVMe
+
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 -c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/generic/cfg/flash_t234_qspi.xml" --showlogs --network usb0 jetson-orin-nano-devkit nvme0n1p1
+
+
+9) Wait for completion
+
+When successful you should see:
+Flash complete
+Rebooting device
+
+
+10) First boot
+
+Jetson will start Ubuntu first boot setup.
+Create user and password when prompted.
+
+
+Optional: Faster reflashing later
+
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only
+
+
+Result:
+JetPack 6.1
+L4T 36.4.4
+A608 carrier board
+Jetson Orin Nano / Orin NX
+NVMe root filesystem
