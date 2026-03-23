@@ -122,7 +122,11 @@ ros2 launch vins vins_rviz.launch.xml
 ```
 ros2 launch realsense2_camera rs_launch.py enable_infra1:=true enable_infra2:=true enable_color:=true enable_sync:=true rgb_camera.color_profile:=640,480,30 enable_gyro:=true enable_accel:=true unite_imu_method:=2 gyro_fps:=200 accel_fps:=200 depth_module.infra_profile:=640,480,30
 
+# for stereo VINS
 ros2 run vins vins_node ~/vins-fusion-with-ros2/custom_config/rs_d455/rs_d455.yaml
+
+# for VINS-mono
+ros2 run vins vins_node ~/vins-fusion-with-ros2/custom_config/rs_d455/rs_d455_mono.yaml
 
 ros2 run loop_fusion loop_fusion_node ~/vins-fusion-ros2/custom_config/rs_d455/rs_d455.yaml #optional for loop closure
 
