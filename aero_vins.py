@@ -46,8 +46,6 @@ class VinsToFCBridge(Node):
         self.boot_0 = None
         self.t_bag_start = None
 
-        self.script_mode = 0 #0 for IMU+VO, 1 for VO only
-
         """
         Frame notation:
         R_A_B means: vector in frame A = R_A_B @ vector in frame B
