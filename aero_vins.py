@@ -46,6 +46,8 @@ class VinsToFCBridge(Node):
         self.boot_0 = None
         self.t_bag_start = None
 
+        self.script_mode = 0 #0 for IMU+VO, 1 for VO only
+
         """
         Frame notation:
         R_A_B means: vector in frame A = R_A_B @ vector in frame B
@@ -329,7 +331,7 @@ class VinsToFCBridge(Node):
 
             msg = self.mav.recv_match("STATUSTEXT", blocking=True)
 
-            self.get_logger().info(f'time_usec:{odom['time_usec']},x: {odom['x']},y: {odom['y']},z: {odom['z']},q: {roll, pitch,yaw},vx: {odom['vx']},vy: {odom['vy']}, vz: {odom['vz']}')
+            self.get_logger().info(f"time_usec:{odom['time_usec']},x: {odom['x']},y: {odom['y']},z: {odom['z']},q: {roll, pitch,yaw},vx: {odom['vx']},vy: {odom['vy']}, vz: {odom['vz']}")
             self.get_logger().info(f"[messages: {msg}")
         except Exception as e:
             self.get_logger().warn(f'Failed to send vision estimate: {e}')
