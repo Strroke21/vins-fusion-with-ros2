@@ -38,7 +38,7 @@ body_T_cam0: !!opencv-matrix
 
 
 #Multiple thread support
-multiple_thread: 1
+multiple_thread: 0
 
 #feature traker paprameters
 max_cnt: 250            # max feature number in feature tracking
