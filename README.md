@@ -40,6 +40,20 @@ cd ceres-solver
 git checkout 2.1.0   # recommended stable
 
 ```
+
+#### Configure with CUDA ENABLED
+
+```
+mkdir build && cd build
+
+cmake .. \
+  -DCMAKE_BUILD_TYPE=Release
+
+make -j$(nproc)
+sudo make install
+sudo ldconfig
+
+```
 ### install Cv bridge
 
 ```
@@ -55,20 +69,6 @@ colcon build --symlink-install --cmake-args -DOpenCV_DIR=/usr/local/share/opencv
 echo -e '\nexport OpenCV_DIR=/usr/local/share/opencv4\nexport LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 
 echo 'source ~/ros_ws/install/setup.bash' >> ~/.bashrc
-
-```
-
-#### Configure with CUDA ENABLED
-
-```
-mkdir build && cd build
-
-cmake .. \
-  -DCMAKE_BUILD_TYPE=Release
-
-make -j$(nproc)
-sudo make install
-sudo ldconfig
 
 ```
 
