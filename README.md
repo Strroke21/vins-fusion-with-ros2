@@ -21,10 +21,19 @@ sudo apt install -y \
   libatlas-base-dev \
   libsuitesparse-dev \
   libeigen3-dev
-
-sudo apt install ros-humble-vision-opencv
+```
+#### install cv_bridge for cv 4.8
 
 ```
+cd ros2_ws/src/
+
+git clone https://github.com/ros-perception/vision_opencv.git -b humble
+
+cd ..
+colcon build --symlink-install
+
+```
+
 #### Clone Ceres Solver
 
 ``` 
