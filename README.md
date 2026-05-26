@@ -83,16 +83,16 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 
 ### clone the repo
 
-``` cd (your workspace)/src
+``` cd ros2_ws/src
 
 git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
-cd vins-fusion-with-ros2
+cd ..
 
 colcon build colcon build --allow-overriding cv_bridge image_geometry
 
 echo "source /opt/ros/humble/bin/ros2" >> ~/.bashrc
-echo "source ~/vins-fusion-with-ros2/install/setup.bash" >> ~/.bashrc
+echo "source ~/ros2_ws/install/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 ```
