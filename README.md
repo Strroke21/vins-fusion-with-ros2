@@ -83,7 +83,8 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 
 ### clone the repo
 
-``` cd ros2_ws/src
+``` 
+cd ros2_ws/src
 
 git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
