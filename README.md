@@ -89,7 +89,7 @@ git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
 cd vins-fusion-with-ros2
 
-colcon build 
+colcon build colcon build --allow-overriding cv_bridge image_geometry
 
 echo "source /opt/ros/humble/bin/ros2" >> ~/.bashrc
 echo "source ~/vins-fusion-with-ros2/install/setup.bash" >> ~/.bashrc
