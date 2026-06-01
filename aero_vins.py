@@ -32,7 +32,7 @@ class VinsToFCBridge(Node):
         self.SOURCE_COMPONENT = int(mavutil.mavlink.MAV_COMP_ID_VISUAL_INERTIAL_ODOMETRY)
 
         # Initial Yaw
-        self.YAW_INIT_SECONDS = 3.0
+        self.YAW_INIT_SECONDS = 10.0
 
         # Send rate
         self.SEND_RATE_HZ = 30.0
@@ -303,11 +303,11 @@ class VinsToFCBridge(Node):
                 odom['time_usec'],
                 odom['x'],
                 odom['y'],
-                odom['z'],
-                roll,
-                pitch,
-                yaw,
-                cov_pose
+                0,
+                0, #roll
+                0, #pitch
+                0, #yaw
+                #cov_pose
             )
 
             # --- Build velocity covariance (3x3 flattened) ---
@@ -319,13 +319,13 @@ class VinsToFCBridge(Node):
             ])
 
             # --- Send VISION_SPEED_ESTIMATE ---
-            self.mav.mav.vision_speed_estimate_send(
-                odom['time_usec'],
-                odom['vx'],
-                odom['vy'],
-                odom['vz'],
-                vel_cov
-            )
+            # self.mav.mav.vision_speed_estimate_send(
+            #     odom['time_usec'],
+            #     odom['vx'],
+            #     odom['vy'],
+            #     0,
+            #     #vel_cov
+            # )
 
             msg = self.mav.recv_match("STATUSTEXT", blocking=True)
 
@@ -333,41 +333,6 @@ class VinsToFCBridge(Node):
             self.get_logger().info(f"[messages: {msg}")
         except Exception as e:
             self.get_logger().warn(f'Failed to send vision estimate: {e}')
-
-    '''def send_odometry(self):
-        with self.lock:
-            msg = self.latest_odom
-            fc_boot_minus_unix_us = self.fc_boot_minus_unix_us
-
-        if msg is None or not self.ready:
-            return
-
-        try:
-            odom = self.convert_odom(msg, fc_boot_minus_unix_us)
-            self.publish_converted_odom(msg, odom)
-            # self.mav.mav.odometry_send(
-            #     odom['time_usec'],
-            #     odom['frame_id'],
-            #     odom['child_frame_id'],
-            #     odom['x'],
-            #     odom['y'],
-            #     odom['z'],
-            #     odom['q'],
-            #     odom['vx'],
-            #     odom['vy'],
-            #     odom['vz'],
-            #     odom['rollspeed'],
-            #     odom['pitchspeed'],
-            #     odom['yawspeed'],
-            #     odom['pose_covariance'],
-            #     odom['velocity_covariance'],
-            #     odom['reset_counter'],
-            #     odom['estimator_type'],
-            #     odom['quality'],
-            # )
-
-        except Exception as e:
-            self.get_logger().warn(f'Failed to send odometry: {e}')'''
 
     def ros_cov36_to_mav_upper21_with_default(self,cov36, default_diag):
         """
@@ -652,8 +617,6 @@ class VinsToFCBridge(Node):
         msg_out.twist.covariance = self.mav_upper21_to_ros_cov36(odom_dict['velocity_covariance'])
 
         self.converted_odom_pub.publish(msg_out)
-
-
 
 
 def main(args=None):
