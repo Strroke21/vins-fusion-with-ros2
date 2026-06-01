@@ -22,17 +22,6 @@ sudo apt install -y \
   libsuitesparse-dev \
   libeigen3-dev
 ```
-#### install cv_bridge for cv 4.8
-
-```
-cd ros2_ws/src/
-
-git clone https://github.com/ros-perception/vision_opencv.git -b humble
-
-cd ..
-colcon build --symlink-install
-
-```
 
 #### Clone Ceres Solver
 
@@ -125,7 +114,7 @@ rviz2 -d ~/vins-fusion-with-ros2/custom_config/vins_fusion.rviz
 ### for ardupilot 
 
 ``` 
-python3 aero_vins.py #update in progress 
+python3 aero_vins.py
 
 ```
 ### Flight Test Video
