@@ -50,6 +50,25 @@ double F_THRESHOLD;
 int SHOW_TRACK;
 int FLOW_BACK;
 
+std::string WORLD_FRAME_ID;
+std::string BODY_FRAME_ID;
+std::string CAMERA_FRAME_ID;
+
+int VISUAL_GATE_CLOSE_THRESH;
+int VISUAL_GATE_REOPEN_LAST_TRACK;
+int VISUAL_GATE_REOPEN_LONG_TRACK;
+int VISUAL_GATE_REOPEN_BACKEND;
+int VISUAL_GATE_REOPEN_CONSECUTIVE;
+
+int LOCAL_MAP_BANK_MAX_SIZE;
+int LOCAL_MAP_MIN_BANK_SIZE;
+int LOCAL_MAP_MAX_HAMMING_DIST;
+int LOCAL_MAP_MIN_MATCHES;
+int LOCAL_MAP_MIN_INLIERS;
+double LOCAL_MAP_PNP_REPROJ_ERROR;
+int LOCAL_MAP_ENABLE;
+double LOCAL_MAP_JUMP_GATE_M;
+double GYRO_BIAS_MIN_COND_RATIO;
 
 template <typename T>
 T readParam(rclcpp::Node::SharedPtr n, std::string name)
@@ -204,6 +223,70 @@ void readParameters(std::string config_file)
         ESTIMATE_TD = 0;
         printf("no imu, fix extrinsic param; no time offset calibration\n");
     }
+
+    fsSettings["world_frame_id"] >> WORLD_FRAME_ID;
+    WORLD_FRAME_ID.empty()? WORLD_FRAME_ID = "world" : WORLD_FRAME_ID;
+    fsSettings["body_frame_id"] >> BODY_FRAME_ID;   
+    BODY_FRAME_ID.empty()? BODY_FRAME_ID = "body" : BODY_FRAME_ID;
+    fsSettings["camera_frame_id"] >> CAMERA_FRAME_ID;
+    CAMERA_FRAME_ID.empty()? CAMERA_FRAME_ID = "camera" : CAMERA_FRAME_ID;
+    
+    ROS_INFO("frame_ids: world=%s body=%s camera=%s", WORLD_FRAME_ID.c_str(),
+             BODY_FRAME_ID.c_str(), CAMERA_FRAME_ID.c_str());
+
+    // Visual feature gate thresholds. Defaults chosen so existing config
+    // files that don't have these keys yet still work; override in YAML
+    // once tuned against real flight logs.
+    cv::FileNode gateCloseNode = fsSettings["visual_gate_close_thresh"];
+    VISUAL_GATE_CLOSE_THRESH = gateCloseNode.empty() ? 80 : (int)gateCloseNode;
+
+    cv::FileNode gateLastTrackNode = fsSettings["visual_gate_reopen_last_track"];
+    VISUAL_GATE_REOPEN_LAST_TRACK = gateLastTrackNode.empty() ? 20 : (int)gateLastTrackNode;
+
+    cv::FileNode gateLongTrackNode = fsSettings["visual_gate_reopen_long_track"];
+    VISUAL_GATE_REOPEN_LONG_TRACK = gateLongTrackNode.empty() ? 40 : (int)gateLongTrackNode;
+
+    cv::FileNode gateBackendNode = fsSettings["visual_gate_reopen_backend"];
+    VISUAL_GATE_REOPEN_BACKEND = gateBackendNode.empty() ? VISUAL_GATE_CLOSE_THRESH : (int)gateBackendNode;
+
+    cv::FileNode gateConsecutiveNode = fsSettings["visual_gate_reopen_consecutive"];
+    VISUAL_GATE_REOPEN_CONSECUTIVE = gateConsecutiveNode.empty() ? 5 : (int)gateConsecutiveNode;
+
+    ROS_INFO("visual gate: close<%d  reopen(last>=%d, long>=%d, backend>=%d for %d consecutive frames)",
+             VISUAL_GATE_CLOSE_THRESH, VISUAL_GATE_REOPEN_LAST_TRACK, VISUAL_GATE_REOPEN_LONG_TRACK,
+             VISUAL_GATE_REOPEN_BACKEND, VISUAL_GATE_REOPEN_CONSECUTIVE);
+
+    cv::FileNode bankMaxNode = fsSettings["local_map_bank_max_size"];
+    LOCAL_MAP_BANK_MAX_SIZE = bankMaxNode.empty() ? 500 : (int)bankMaxNode;
+
+    cv::FileNode bankMinNode = fsSettings["local_map_min_bank_size"];
+    LOCAL_MAP_MIN_BANK_SIZE = bankMinNode.empty() ? 30 : (int)bankMinNode;
+
+    cv::FileNode hammingNode = fsSettings["local_map_max_hamming_dist"];
+    LOCAL_MAP_MAX_HAMMING_DIST = hammingNode.empty() ? 50 : (int)hammingNode;
+
+    cv::FileNode minMatchNode = fsSettings["local_map_min_matches"];
+    LOCAL_MAP_MIN_MATCHES = minMatchNode.empty() ? 10 : (int)minMatchNode;
+
+    cv::FileNode minInlierNode = fsSettings["local_map_min_inliers"];
+    LOCAL_MAP_MIN_INLIERS = minInlierNode.empty() ? 8 : (int)minInlierNode;
+
+    cv::FileNode reprojNode = fsSettings["local_map_pnp_reproj_error"];
+    LOCAL_MAP_PNP_REPROJ_ERROR = reprojNode.empty() ? 0.01 : (double)reprojNode;
+
+    cv::FileNode enableNode = fsSettings["local_map_enable"];
+    LOCAL_MAP_ENABLE = enableNode.empty() ? 1 : (int)enableNode;
+
+    cv::FileNode jumpGateNode = fsSettings["local_map_jump_gate_m"];
+    LOCAL_MAP_JUMP_GATE_M = jumpGateNode.empty() ? 5.0 : (double)jumpGateNode;
+
+    cv::FileNode gyroBiasCondNode = fsSettings["gyro_bias_min_cond_ratio"];
+    GYRO_BIAS_MIN_COND_RATIO = gyroBiasCondNode.empty() ? 0.01 : (double)gyroBiasCondNode;
+
+    ROS_INFO("local map bank: enabled=%d max_size=%d min_size=%d hamming<%d min_matches=%d min_inliers=%d reproj_err=%f jump_gate_m=%f",
+             LOCAL_MAP_ENABLE, LOCAL_MAP_BANK_MAX_SIZE, LOCAL_MAP_MIN_BANK_SIZE, LOCAL_MAP_MAX_HAMMING_DIST,
+             LOCAL_MAP_MIN_MATCHES, LOCAL_MAP_MIN_INLIERS, LOCAL_MAP_PNP_REPROJ_ERROR, LOCAL_MAP_JUMP_GATE_M);
+    ROS_INFO("gyro bias min condition ratio: %f", GYRO_BIAS_MIN_COND_RATIO);
 
     fsSettings.release();
 }

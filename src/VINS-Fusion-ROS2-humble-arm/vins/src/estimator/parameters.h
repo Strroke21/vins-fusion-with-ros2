@@ -71,6 +71,37 @@ extern int MIN_DIST;
 extern double F_THRESHOLD;
 extern int SHOW_TRACK;
 extern int FLOW_BACK;
+extern std::string WORLD_FRAME_ID;
+extern std::string BODY_FRAME_ID;
+extern std::string CAMERA_FRAME_ID;
+
+// Visual feature gate: prevents low-quality visual data from entering the
+// backend optimizer (and therefore the marginalization prior) when tracking
+// degrades. Closes instantly on a single bad frame; reopens only after
+// several consecutive frames where all three tracking signals recover.
+extern int VISUAL_GATE_CLOSE_THRESH;       // backend feature count below which the gate closes immediately
+extern int VISUAL_GATE_REOPEN_LAST_TRACK;  // required last_track_num to count this frame as healthy
+extern int VISUAL_GATE_REOPEN_LONG_TRACK;  // required long_track_num to count this frame as healthy
+extern int VISUAL_GATE_REOPEN_BACKEND;     // required backend feature count to count this frame as healthy
+extern int VISUAL_GATE_REOPEN_CONSECUTIVE; // consecutive healthy frames required before reopening
+
+// Local relocalization bank (Part 3): short-horizon self-landmarks that
+// anchor pose while the visual feature gate is closed. Only ever engages
+// with enough RANSAC-verified inliers -- see LOCAL_MAP_MIN_INLIERS.
+extern int LOCAL_MAP_BANK_MAX_SIZE;      // ring buffer capacity (descriptors)
+extern int LOCAL_MAP_MIN_BANK_SIZE;      // don't attempt matching below this
+extern int LOCAL_MAP_MAX_HAMMING_DIST;   // per-match ORB Hamming distance cutoff (max 256)
+extern int LOCAL_MAP_MIN_MATCHES;        // minimum raw matches before attempting PnP-RANSAC
+extern int LOCAL_MAP_MIN_INLIERS;        // minimum RANSAC inliers before trusting the result at all
+extern double LOCAL_MAP_PNP_REPROJ_ERROR; // RANSAC reprojection threshold, in normalized-ray units
+extern int LOCAL_MAP_ENABLE; // master switch -- 0 disables bank population and relocalization entirely
+extern double LOCAL_MAP_JUMP_GATE_M; // reject relocalization if disambiguated pose disagrees with IMU-propagated prediction by more than this (meters)
+
+// Gyroscope bias initial-calibration conditioning check (initial_alignment.cpp).
+// Ratio of smallest/largest eigenvalue of the 3x3 normal-equations matrix;
+// too low means the init window lacked genuine multi-axis rotation and the
+// solved delta_bg shouldn't be trusted.
+extern double GYRO_BIAS_MIN_COND_RATIO;
 
 void readParameters(std::string config_file);
 

@@ -11,7 +11,7 @@
 
 #pragma once
 
-//#define GPU_MODE 1
+#define GPU_MODE 0
 
 
 #include <cstdio>
@@ -22,7 +22,7 @@
 #include <opencv2/opencv.hpp>
 #include <eigen3/Eigen/Dense>
 
-#ifdef GPU_MODE
+#if GPU_MODE
 #include <opencv2/cudaoptflow.hpp>
 #include <opencv2/cudaimgproc.hpp>
 #include <opencv2/cudaarithm.hpp>
@@ -48,10 +48,25 @@ bool inBorder(const cv::Point2f &pt);
 void reduceVector(vector<cv::Point2f> &v, vector<uchar> status);
 void reduceVector(vector<int> &v, vector<uchar> status);
 
+struct FeatureQualityData
+{
+    bool valid = false;
+    double time = 0.0;
+    int tracked = 0;
+    int long5 = 0;
+    int new_features = 0;
+    int total = 0;
+};
+
+extern FeatureQualityData g_feature_quality;
+
+
 class FeatureTracker
 {
 public:
     FeatureTracker();
+    int latest_tracked = 0;
+    int latest_long_tracks_gt_5 = 0;
     map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> trackImage(double _cur_time, const cv::Mat &_img, const cv::Mat &_img1 = cv::Mat());
     void setMask();
     void addPoints();
