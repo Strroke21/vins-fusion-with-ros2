@@ -48,8 +48,8 @@ add_executable(Calibrations
 
 # added from DEBUG
 ament_target_dependencies(Calibrations rclcpp std_msgs OpenCV)
-
-add_library(camera_models
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+add_library(camera_models 
     src/chessboard/Chessboard.cc
     src/calib/CameraCalibration.cc
     src/camera_models/Camera.cc

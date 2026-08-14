@@ -10,6 +10,7 @@
  *******************************************************/
 
 #include "feature_tracker.h"
+
 FeatureQualityData g_feature_quality;
 bool FeatureTracker::inBorder(const cv::Point2f &pt)
 {
@@ -292,7 +293,7 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
 
     if (1)
     {
-        //rejectWithF();
+        rejectWithF();
         ROS_DEBUG("set mask begins");
         TicToc t_m;
         setMask();
