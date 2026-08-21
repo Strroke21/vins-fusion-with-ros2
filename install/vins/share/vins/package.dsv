@@ -1,0 +1,17 @@
+source;share/vins/hook/cmake_prefix_path.ps1
+source;share/vins/hook/cmake_prefix_path.dsv
+source;share/vins/hook/cmake_prefix_path.sh
+source;share/vins/hook/ld_library_path_lib.ps1
+source;share/vins/hook/ld_library_path_lib.dsv
+source;share/vins/hook/ld_library_path_lib.sh
+source;share/vins/hook/path.ps1
+source;share/vins/hook/path.dsv
+source;share/vins/hook/path.sh
+source;share/vins/hook/pythonscriptspath.ps1
+source;share/vins/hook/pythonscriptspath.dsv
+source;share/vins/hook/pythonscriptspath.sh
+source;share/vins/local_setup.bash
+source;share/vins/local_setup.dsv
+source;share/vins/local_setup.ps1
+source;share/vins/local_setup.sh
+source;share/vins/local_setup.zsh

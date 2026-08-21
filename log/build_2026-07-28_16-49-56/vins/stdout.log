@@ -1,0 +1,3 @@
+[35m[1mConsolidate compiler generated dependencies of target vins_lib[0m
+[  4%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o[0m
+[  8%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o[0m

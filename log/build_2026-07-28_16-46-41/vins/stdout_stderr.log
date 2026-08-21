@@ -1,0 +1,48 @@
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_generator_c[0m
+[  1%] Built target vins__rs
+[  3%] Built target vins__cpp
+[  8%] Built target vins__rosidl_generator_c
+[35m[1mConsolidate compiler generated dependencies of target vins_lib[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_cpp[0m
+[  8%] Built target ament_cmake_python_symlink_vins
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_c[0m
+[ 14%] Built target vins__rosidl_typesupport_cpp
+[ 19%] Built target vins__rosidl_typesupport_c
+[ 30%] Built target vins__rosidl_typesupport_fastrtps_cpp
+[ 30%] Built target vins__rosidl_typesupport_introspection_c
+[ 35%] Built target vins__rosidl_typesupport_introspection_cpp
+[ 41%] Built target vins__rosidl_typesupport_fastrtps_c
+[ 41%] Built target vins
+[ 42%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o[0m
+[ 44%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o[0m
+[ 46%] Built target vins__py
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_generator_py[0m
+[ 50%] Built target vins__rosidl_generator_py
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_c__pyext[0m
+[ 53%] Built target vins__rosidl_typesupport_fastrtps_c__pyext
+[ 57%] Built target vins__rosidl_typesupport_introspection_c__pyext
+[ 60%] Built target vins__rosidl_typesupport_c__pyext
+running egg_info
+writing manifest file 'vins.egg-info/SOURCES.txt'
+[ 60%] Built target ament_cmake_python_build_vins_egg
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/utility/visualization.cpp:10[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/utility/visualization.h:21:10:[m[K [01;31m[Kfatal error: [m[Kcv_bridge/cv_bridge.hpp: No such file or directory
+   21 | #include [01;31m[K<cv_bridge/cv_bridge.hpp>[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/vins_lib.dir/build.make:216: CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/estimator.cpp:11[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/../utility/visualization.h:21:10:[m[K [01;31m[Kfatal error: [m[Kcv_bridge/cv_bridge.hpp: No such file or directory
+   21 | #include [01;31m[K<cv_bridge/cv_bridge.hpp>[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/vins_lib.dir/build.make:90: CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:617: CMakeFiles/vins_lib.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

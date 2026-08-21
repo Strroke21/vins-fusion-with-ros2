@@ -1,0 +1,1 @@
+/home/deathstroke/vins-fusion-ros2/build/global_fusion/ament_cmake_core/global_fusionConfig-version.cmake

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "vins__py",
+		"source" : "/home/deathstroke/vins-fusion-ros2/build/vins/vins__py"
+	}
+}

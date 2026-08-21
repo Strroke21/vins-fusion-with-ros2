@@ -1,0 +1,95 @@
+-- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 3.1.9 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.9 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.9 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 6.1.3 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found rosidl_default_generators: 1.2.0 (/home/deathstroke/rust_ws/install/rosidl_default_generators/share/rosidl_default_generators/cmake)
+-- Found geometry_msgs: 4.9.0 (/home/deathstroke/rust_ws/install/geometry_msgs/share/geometry_msgs/cmake)
+-- Found visualization_msgs: 4.9.0 (/home/deathstroke/rust_ws/install/visualization_msgs/share/visualization_msgs/cmake)
+-- Found nav_msgs: 4.9.0 (/home/deathstroke/rust_ws/install/nav_msgs/share/nav_msgs/cmake)
+-- Found tf2: 0.25.22 (/opt/ros/humble/share/tf2/cmake)
+-- Found tf2_ros: 0.25.22 (/opt/ros/humble/share/tf2_ros/cmake)
+-- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+-- Found camera_models: 0.0.0 (/home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/cmake)
+-- Found image_transport: 3.1.13 (/opt/ros/humble/share/image_transport/cmake)
+-- Found AMD headers in: /usr/include/suitesparse
+-- Found AMD library: /usr/lib/x86_64-linux-gnu/libamd.so
+-- Found CAMD headers in: /usr/include/suitesparse
+-- Found CAMD library: /usr/lib/x86_64-linux-gnu/libcamd.so
+-- Found CCOLAMD headers in: /usr/include/suitesparse
+-- Found CCOLAMD library: /usr/lib/x86_64-linux-gnu/libccolamd.so
+-- Found CHOLMOD headers in: /usr/include/suitesparse
+-- Found CHOLMOD library: /usr/lib/x86_64-linux-gnu/libcholmod.so
+-- Found COLAMD headers in: /usr/include/suitesparse
+-- Found COLAMD library: /usr/lib/x86_64-linux-gnu/libcolamd.so
+-- Found SPQR headers in: /usr/include/suitesparse
+-- Found SPQR library: /usr/lib/x86_64-linux-gnu/libspqr.so
+-- Found Config headers in: /usr/include/suitesparse
+-- Found Config library: /usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so
+-- Found Intel Thread Building Blocks (TBB) library (2021.5 / ) include location: . Assuming SuiteSparseQR was compiled with TBB.
+-- Adding librt to SuiteSparse_config libraries (required on Linux & Unix [not OSX] if SuiteSparse is compiled with timing).
+-- Could NOT find METIS (missing: METIS_INCLUDE_DIR METIS_LIBRARY) 
+-- Found required Ceres dependency: Eigen version 3.3.91 in /usr/local/share/eigen3/cmake
+-- Found required Ceres dependency: glog
+-- Found required Ceres dependency: gflags
+-- Found Ceres version: 2.1.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SuiteSparse, CXSparse, SchurSpecializations, Multithreading]
+-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+-- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/deathstroke/vins-fusion-ros2/build/vins
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_generator_c[0m
+[  5%] Built target vins__rosidl_generator_c
+[  8%] Built target vins__cpp
+[  8%] Built target vins__rs
+[35m[1mConsolidate compiler generated dependencies of target vins_lib[0m
+[  8%] Built target ament_cmake_python_symlink_vins
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_cpp[0m
+[ 14%] Built target vins__rosidl_typesupport_c
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_cpp[0m
+[ 19%] Built target vins__rosidl_typesupport_introspection_cpp
+[ 25%] Built target vins__rosidl_typesupport_introspection_c
+[ 30%] Built target vins__rosidl_typesupport_cpp
+[ 35%] Built target vins__rosidl_typesupport_fastrtps_c
+[ 41%] Built target vins__rosidl_typesupport_fastrtps_cpp
+[ 42%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o[0m
+[ 44%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/factor/projectionTwoFrameOneCamFactor.cpp.o[0m
+[ 46%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/parameters.cpp.o[0m
+[ 48%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/factor/projectionTwoFrameTwoCamFactor.cpp.o[0m
+[ 48%] Built target vins
+[ 50%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/feature_manager.cpp.o[0m
+[ 51%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/factor/projectionOneFrameTwoCamFactor.cpp.o[0m
+[ 53%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/factor/projection_fixed_point_factor.cpp.o[0m
+[ 58%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o[0m
+[ 58%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/initial/initial_aligment.cpp.o[0m
+[ 58%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/initial/solve_5pts.cpp.o[0m
+[ 60%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/initial/initial_ex_rotation.cpp.o[0m
+[ 62%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/initial/initial_sfm.cpp.o[0m
+[ 64%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/featureTracker/feature_tracker.cpp.o[0m
+[ 66%] Built target vins__py
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_generator_py[0m
+[ 69%] Built target vins__rosidl_generator_py
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_c__pyext[0m
+[ 73%] Built target vins__rosidl_typesupport_introspection_c__pyext
+[ 76%] Built target vins__rosidl_typesupport_fastrtps_c__pyext
+[ 80%] Built target vins__rosidl_typesupport_c__pyext
+running egg_info
+writing manifest file 'vins.egg-info/SOURCES.txt'
+[ 80%] Built target ament_cmake_python_build_vins_egg

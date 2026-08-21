@@ -1,0 +1,1 @@
+/home/deathstroke/vins-fusion-ros2/build/vins/rosidl_generator_rs/vins/rust/src/lib.rs

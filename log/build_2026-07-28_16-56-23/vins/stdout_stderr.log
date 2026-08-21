@@ -1,0 +1,29 @@
+[ 73%] Built target vins_lib
+[35m[1mConsolidate compiler generated dependencies of target vins_node[0m
+[35m[1mConsolidate compiler generated dependencies of target kitti_gps_test[0m
+[ 78%] [32mBuilding CXX object CMakeFiles/kitti_odom_test.dir/src/KITTIOdomTest.cpp.o[0m
+[ 82%] [32m[1mLinking CXX executable vins_node[0m
+[ 86%] [32m[1mLinking CXX executable kitti_gps_test[0m
+/usr/bin/ld: warning: libopencv_imgcodecs.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_imgcodecs.so.408
+/usr/bin/ld: warning: libopencv_core.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_core.so.408
+/usr/bin/ld: warning: libopencv_core.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_core.so.408
+/usr/bin/ld: libvins_lib.so: undefined reference to `ProjectionFixedPointFactor::sqrt_info'
+/usr/bin/ld: libvins_lib.so: undefined reference to `ProjectionFixedPointFactor::ProjectionFixedPointFactor(Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&)'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/kitti_gps_test.dir/build.make:286: kitti_gps_test] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:221: CMakeFiles/kitti_gps_test.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+/usr/bin/ld: libvins_lib.so: undefined reference to `ProjectionFixedPointFactor::sqrt_info'
+/usr/bin/ld: libvins_lib.so: undefined reference to `ProjectionFixedPointFactor::ProjectionFixedPointFactor(Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&)'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/vins_node.dir/build.make:286: vins_node] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:169: CMakeFiles/vins_node.dir/all] Error 2
+[ 91%] [32m[1mLinking CXX executable kitti_odom_test[0m
+/usr/bin/ld: warning: libopencv_imgcodecs.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_imgcodecs.so.408
+/usr/bin/ld: warning: libopencv_core.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_core.so.408
+/usr/bin/ld: libvins_lib.so: undefined reference to `ProjectionFixedPointFactor::sqrt_info'
+/usr/bin/ld: libvins_lib.so: undefined reference to `ProjectionFixedPointFactor::ProjectionFixedPointFactor(Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&)'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/kitti_odom_test.dir/build.make:286: kitti_odom_test] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:195: CMakeFiles/kitti_odom_test.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

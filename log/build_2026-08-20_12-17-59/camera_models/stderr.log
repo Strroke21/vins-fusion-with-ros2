@@ -1,0 +1,26 @@
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/src/sparse_graph/Transform.cc:1[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/include/camodocal/sparse_graph/Transform.h:22:5:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   22 |     [01;35m[Kconst[m[K double* const rotationData(void) const;
+      |     [01;35m[K^~~~~[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/include/camodocal/sparse_graph/Transform.h:27:5:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   27 |     [01;35m[Kconst[m[K double* const translationData(void) const;
+      |     [01;35m[K^~~~~[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/src/sparse_graph/Transform.cc:36:1:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   36 | [01;35m[Kconst[m[K double* const
+      | [01;35m[K^~~~~[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/src/sparse_graph/Transform.cc:60:1:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   60 | [01;35m[Kconst[m[K double* const
+      | [01;35m[K^~~~~[m[K
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/src/sparse_graph/Transform.cc:1[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/include/camodocal/sparse_graph/Transform.h:22:5:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   22 |     [01;35m[Kconst[m[K double* const rotationData(void) const;
+      |     [01;35m[K^~~~~[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/include/camodocal/sparse_graph/Transform.h:27:5:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   27 |     [01;35m[Kconst[m[K double* const translationData(void) const;
+      |     [01;35m[K^~~~~[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/src/sparse_graph/Transform.cc:36:1:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   36 | [01;35m[Kconst[m[K double* const
+      | [01;35m[K^~~~~[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/camera_models/src/sparse_graph/Transform.cc:60:1:[m[K [01;35m[Kwarning: [m[Ktype qualifiers ignored on function return type [[01;35m[K-Wignored-qualifiers[m[K]
+   60 | [01;35m[Kconst[m[K double* const
+      | [01;35m[K^~~~~[m[K

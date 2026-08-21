@@ -1,0 +1,49 @@
+[0.013s] Invoking command in '/home/deathstroke/vins-fusion-ros2/build/camera_models': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/deathstroke/realsense-ros/install/realsense2_ros_mqtt_bridge:/home/deathstroke/rust_ws/install/examples_worker_demo:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_pub_sub:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_client_service:/home/deathstroke/rust_ws/install/examples_parameter_demo:/home/deathstroke/rust_ws/install/examples_logging_demo:/home/deathstroke/rust_ws/install/sensor_msgs_py:/home/deathstroke/rust_ws/install/rust_pubsub:/home/deathstroke/rust_ws/install/examples_rclrs_message_demo:/home/deathstroke/rust_ws/install/rosidl_runtime_rs:/home/deathstroke/rust_ws/install/rclrs:/opt/ros/humble /usr/bin/cmake --build /home/deathstroke/vins-fusion-ros2/build/camera_models -- -j32 -l32
+[0.062s] [ 48%] Built target camera_models
+[0.067s] [100%] Built target Calibrations
+[0.080s] Invoked command in '/home/deathstroke/vins-fusion-ros2/build/camera_models' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/deathstroke/realsense-ros/install/realsense2_ros_mqtt_bridge:/home/deathstroke/rust_ws/install/examples_worker_demo:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_pub_sub:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_client_service:/home/deathstroke/rust_ws/install/examples_parameter_demo:/home/deathstroke/rust_ws/install/examples_logging_demo:/home/deathstroke/rust_ws/install/sensor_msgs_py:/home/deathstroke/rust_ws/install/rust_pubsub:/home/deathstroke/rust_ws/install/examples_rclrs_message_demo:/home/deathstroke/rust_ws/install/rosidl_runtime_rs:/home/deathstroke/rust_ws/install/rclrs:/opt/ros/humble /usr/bin/cmake --build /home/deathstroke/vins-fusion-ros2/build/camera_models -- -j32 -l32
+[0.081s] Invoking command in '/home/deathstroke/vins-fusion-ros2/build/camera_models': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/deathstroke/realsense-ros/install/realsense2_ros_mqtt_bridge:/home/deathstroke/rust_ws/install/examples_worker_demo:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_pub_sub:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_client_service:/home/deathstroke/rust_ws/install/examples_parameter_demo:/home/deathstroke/rust_ws/install/examples_logging_demo:/home/deathstroke/rust_ws/install/sensor_msgs_py:/home/deathstroke/rust_ws/install/rust_pubsub:/home/deathstroke/rust_ws/install/examples_rclrs_message_demo:/home/deathstroke/rust_ws/install/rosidl_runtime_rs:/home/deathstroke/rust_ws/install/rclrs:/opt/ros/humble /usr/bin/cmake --install /home/deathstroke/vins-fusion-ros2/build/camera_models
+[0.085s] -- Install configuration: ""
+[0.085s] -- Execute custom install script
+[0.085s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/environment/library_path.sh
+[0.085s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/environment/library_path.dsv
+[0.085s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/lib/camera_models/Calibrations
+[0.085s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/bin/Calibrations
+[0.085s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/lib/libcamera_models.a
+[0.085s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/lib/camera_models/Calibrations
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/calib/CameraCalibration.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/Camera.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/CameraFactory.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/CataCamera.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/CostFunctionFactory.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/EquidistantCamera.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/PinholeCamera.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/PinholeFullCamera.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/camera_models/ScaramuzzaCamera.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/chessboard/Chessboard.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/chessboard/ChessboardCorner.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/chessboard/ChessboardQuad.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/chessboard/Spline.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/gpl/EigenQuaternionParameterization.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/gpl/EigenUtils.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/gpl/gpl.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/include//camodocal/sparse_graph/Transform.h
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/ament_index/resource_index/package_run_dependencies/camera_models
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/ament_index/resource_index/parent_prefix_path/camera_models
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/environment/ament_prefix_path.sh
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/environment/ament_prefix_path.dsv
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/environment/path.sh
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/environment/path.dsv
+[0.086s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/local_setup.bash
+[0.087s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/local_setup.sh
+[0.087s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/local_setup.zsh
+[0.087s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/local_setup.dsv
+[0.087s] -- Symlinking: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/package.dsv
+[0.092s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/ament_index/resource_index/packages/camera_models
+[0.092s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.092s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/cmake/ament_cmake_export_libraries-extras.cmake
+[0.092s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.093s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/cmake/camera_modelsConfig.cmake
+[0.093s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/cmake/camera_modelsConfig-version.cmake
+[0.093s] -- Up-to-date symlink: /home/deathstroke/vins-fusion-ros2/install/camera_models/share/camera_models/package.xml
+[0.105s] Invoked command in '/home/deathstroke/vins-fusion-ros2/build/camera_models' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/deathstroke/realsense-ros/install/realsense2_ros_mqtt_bridge:/home/deathstroke/rust_ws/install/examples_worker_demo:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_pub_sub:/home/deathstroke/rust_ws/install/examples_rclrs_minimal_client_service:/home/deathstroke/rust_ws/install/examples_parameter_demo:/home/deathstroke/rust_ws/install/examples_logging_demo:/home/deathstroke/rust_ws/install/sensor_msgs_py:/home/deathstroke/rust_ws/install/rust_pubsub:/home/deathstroke/rust_ws/install/examples_rclrs_message_demo:/home/deathstroke/rust_ws/install/rosidl_runtime_rs:/home/deathstroke/rust_ws/install/rclrs:/opt/ros/humble /usr/bin/cmake --install /home/deathstroke/vins-fusion-ros2/build/camera_models

@@ -1,0 +1,33 @@
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_generator_c[0m
+[  1%] Built target vins__rs
+[  3%] Built target vins__cpp
+[  8%] Built target vins__rosidl_generator_c
+[35m[1mConsolidate compiler generated dependencies of target vins_lib[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_cpp[0m
+[  8%] Built target ament_cmake_python_symlink_vins
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_c[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_c[0m
+[ 14%] Built target vins__rosidl_typesupport_cpp
+[ 19%] Built target vins__rosidl_typesupport_c
+[ 30%] Built target vins__rosidl_typesupport_fastrtps_cpp
+[ 30%] Built target vins__rosidl_typesupport_introspection_c
+[ 35%] Built target vins__rosidl_typesupport_introspection_cpp
+[ 41%] Built target vins__rosidl_typesupport_fastrtps_c
+[ 41%] Built target vins
+[ 42%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o[0m
+[ 44%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o[0m
+[ 46%] Built target vins__py
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_generator_py[0m
+[ 50%] Built target vins__rosidl_generator_py
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_fastrtps_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_introspection_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target vins__rosidl_typesupport_c__pyext[0m
+[ 53%] Built target vins__rosidl_typesupport_fastrtps_c__pyext
+[ 57%] Built target vins__rosidl_typesupport_introspection_c__pyext
+[ 60%] Built target vins__rosidl_typesupport_c__pyext
+running egg_info
+writing manifest file 'vins.egg-info/SOURCES.txt'
+[ 60%] Built target ament_cmake_python_build_vins_egg

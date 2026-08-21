@@ -1,0 +1,1 @@
+/home/deathstroke/vins-fusion-ros2/build/vins/rosidl_cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake

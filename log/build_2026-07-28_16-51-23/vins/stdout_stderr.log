@@ -1,0 +1,17 @@
+[  4%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o[0m
+[  8%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o[0m
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/estimator.cpp:[m[K In member function ‘[01m[Kbool Estimator::initialStructure()[m[K’:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/estimator.cpp:693:17:[m[K [01;35m[Kwarning: [m[KISO C++ forbids variable length array ‘[01m[KQ[m[K’ [[01;35m[K-Wvla[m[K]
+  693 |     Quaterniond [01;35m[KQ[m[K[frame_count + 1];
+      |                 [01;35m[K^[m[K
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/estimator.cpp:694:14:[m[K [01;35m[Kwarning: [m[KISO C++ forbids variable length array ‘[01m[KT[m[K’ [[01;35m[K-Wvla[m[K]
+  694 |     Vector3d [01;35m[KT[m[K[frame_count + 1];
+      |              [01;35m[K^[m[K
+[ 13%] [32m[1mLinking CXX shared library libvins_lib.so[0m
+/usr/bin/ld: /home/deathstroke/vins-fusion-ros2/install/camera_models/lib/libcamera_models.a(CameraFactory.cc.o): warning: relocation against `_ZTVN5boost6detail17sp_counted_impl_pIN9camodocal13CameraFactoryEEE' in read-only section `.text._ZN5boost6detail17sp_counted_impl_pIN9camodocal13CameraFactoryEED2Ev[_ZN5boost6detail17sp_counted_impl_pIN9camodocal13CameraFactoryEED5Ev]'
+/usr/bin/ld: /home/deathstroke/vins-fusion-ros2/install/camera_models/lib/libcamera_models.a(CameraFactory.cc.o): relocation R_X86_64_PC32 against symbol `_ZN9camodocal13CameraFactory10m_instanceE' can not be used when making a shared object; recompile with -fPIC
+/usr/bin/ld: final link failed: bad value
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/vins_lib.dir/build.make:516: libvins_lib.so] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:143: CMakeFiles/vins_lib.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

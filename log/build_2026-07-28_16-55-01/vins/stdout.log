@@ -1,0 +1,8 @@
+[35m[1mConsolidate compiler generated dependencies of target vins_lib[0m
+[  4%] [32m[1mLinking CXX shared library libvins_lib.so[0m
+[ 73%] Built target vins_lib
+[ 86%] [32mBuilding CXX object CMakeFiles/kitti_gps_test.dir/src/KITTIGPSTest.cpp.o[0m
+[ 86%] [32mBuilding CXX object CMakeFiles/kitti_odom_test.dir/src/KITTIOdomTest.cpp.o[0m
+[ 86%] [32mBuilding CXX object CMakeFiles/vins_node.dir/src/rosNodeTest.cpp.o[0m
+[ 91%] [32m[1mLinking CXX executable kitti_gps_test[0m
+[ 95%] [32m[1mLinking CXX executable vins_node[0m

@@ -1,0 +1,1 @@
+/home/deathstroke/vins-fusion-ros2/build/loop_fusion/ament_cmake_environment_hooks/local_setup.bash

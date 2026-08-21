@@ -19,7 +19,7 @@ Run (bag):
   ros2 bag play <bag_path> --clock
 
   # Terminal 2
-  python3 imu_params_from_topic.py --topic /camera/camera/imu --t0 120 --t1 240
+  python3 imu_calibration.py --topic /camera/camera/imu --t0 120 --t1 240
 """
 
 import argparse
@@ -99,9 +99,9 @@ def estimate_params(t: np.ndarray, acc: np.ndarray, gyr: np.ndarray, T_bias: flo
     return Params(acc_n_xyz=acc_n, gyr_n_xyz=gyr_n, acc_w_xyz=acc_w, gyr_w_xyz=gyr_w, dt=dt)
 
 
-class ImuParamEstimator(Node):
+class Imu_Calibration(Node):
     def __init__(self, topic: str, t0: float, t1: float, T_bias: float):
-        super().__init__("imu_param_estimator")
+        super().__init__("Imu_Calibration")
 
         if t1 <= t0:
             raise ValueError("t1 must be > t0")
@@ -196,7 +196,7 @@ def main():
     args = ap.parse_args()
 
     rclpy.init()
-    node = ImuParamEstimator(topic=args.topic, t0=args.t0, t1=args.t1, T_bias=args.bias_window)
+    node = Imu_Calibration(topic=args.topic, t0=args.t0, t1=args.t1, T_bias=args.bias_window)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

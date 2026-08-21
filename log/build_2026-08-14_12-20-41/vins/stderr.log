@@ -1,0 +1,24 @@
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/featureTracker/feature_tracker.cpp:12[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/featureTracker/feature_tracker.h:26:10:[m[K [01;31m[Kfatal error: [m[Kopencv2/cudaoptflow.hpp: No such file or directory
+   26 | #include [01;31m[K<opencv2/cudaoptflow.hpp>[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/vins_lib.dir/build.make:300: CMakeFiles/vins_lib.dir/src/featureTracker/feature_tracker.cpp.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/estimator.h:42[m[K,
+                 from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/estimator.cpp:10[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/estimator/../featureTracker/feature_tracker.h:26:10:[m[K [01;31m[Kfatal error: [m[Kopencv2/cudaoptflow.hpp: No such file or directory
+   26 | #include [01;31m[K<opencv2/cudaoptflow.hpp>[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+In file included from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/utility/../estimator/estimator.h:42[m[K,
+                 from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/utility/visualization.h:31[m[K,
+                 from [01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/utility/visualization.cpp:10[m[K:
+[01m[K/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/src/utility/../estimator/../featureTracker/feature_tracker.h:26:10:[m[K [01;31m[Kfatal error: [m[Kopencv2/cudaoptflow.hpp: No such file or directory
+   26 | #include [01;31m[K<opencv2/cudaoptflow.hpp>[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/vins_lib.dir/build.make:90: CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o] Error 1
+gmake[2]: *** [CMakeFiles/vins_lib.dir/build.make:216: CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:617: CMakeFiles/vins_lib.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

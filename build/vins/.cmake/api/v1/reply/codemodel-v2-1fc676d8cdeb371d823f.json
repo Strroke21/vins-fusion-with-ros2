@@ -1,0 +1,294 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-208f598270b53df59d0b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						20,
+						21,
+						22
+					]
+				},
+				{
+					"build" : "vins__rs",
+					"jsonFile" : "directory-vins__rs-Release-fb3b4e2d000949291dd0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/deathstroke/vins-fusion-ros2/build/vins/vins__rs",
+					"targetIndexes" : 
+					[
+						19
+					]
+				},
+				{
+					"build" : "vins__py",
+					"jsonFile" : "directory-vins__py-Release-850ecaf7cdacd749904e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/deathstroke/vins-fusion-ros2/build/vins/vins__py",
+					"targetIndexes" : 
+					[
+						7
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "vins",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_vins_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_vins_egg-Release-d3c7d968e9cbc5961b23.json",
+					"name" : "ament_cmake_python_build_vins_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_symlink_vins::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_symlink_vins-Release-721dc34118886eb45d81.json",
+					"name" : "ament_cmake_python_symlink_vins",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "kitti_gps_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-kitti_gps_test-Release-bcd2e2aeed286ae3118a.json",
+					"name" : "kitti_gps_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "kitti_odom_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-kitti_odom_test-Release-841114d634b93ef1e6a4.json",
+					"name" : "kitti_odom_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Release-d67199c46600e0c1ea03.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins-Release-83e84b6862929c1c8eb4.json",
+					"name" : "vins",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__cpp-Release-0cbc0aabfeb597917172.json",
+					"name" : "vins__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "vins__py::@c0c2b123dc73daacf905",
+					"jsonFile" : "target-vins__py-Release-93c4c40ff6af0d5dc7ae.json",
+					"name" : "vins__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_generator_c-Release-20c6367dba5512f87009.json",
+					"name" : "vins__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_generator_py-Release-e41fa99e06e3050e49c1.json",
+					"name" : "vins__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_c-Release-3565c1d5b7bee4b1a8f5.json",
+					"name" : "vins__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_c__pyext-Release-10451308b7634a5f4551.json",
+					"name" : "vins__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_cpp-Release-134a6646d52e9d5c7617.json",
+					"name" : "vins__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_fastrtps_c-Release-55bef4167564fe53d5bc.json",
+					"name" : "vins__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_fastrtps_c__pyext-Release-d147baacc7988d23a1f2.json",
+					"name" : "vins__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_fastrtps_cpp-Release-20ecbd66aa4700872eb5.json",
+					"name" : "vins__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_introspection_c-Release-86d0a753d4f5d0dd04a6.json",
+					"name" : "vins__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_introspection_c__pyext-Release-9deee76b9a5af948e525.json",
+					"name" : "vins__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins__rosidl_typesupport_introspection_cpp-Release-4ef5f6977815bee4cf26.json",
+					"name" : "vins__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "vins__rs::@952bca7b0a516d8b0876",
+					"jsonFile" : "target-vins__rs-Release-7db44f37debf84afc4a6.json",
+					"name" : "vins__rs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins_lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins_lib-Release-85ef80afa530bace69d2.json",
+					"name" : "vins_lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins_node-Release-299fe1e64ba85c0f0e25.json",
+					"name" : "vins_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "vins_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-vins_uninstall-Release-bc736155820c3ee006d9.json",
+					"name" : "vins_uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/deathstroke/vins-fusion-ros2/build/vins",
+		"source" : "/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}
