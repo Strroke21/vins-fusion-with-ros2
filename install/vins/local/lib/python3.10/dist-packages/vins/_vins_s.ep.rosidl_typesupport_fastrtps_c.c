@@ -1,1 +1,0 @@
-/home/deathstroke/vins-fusion-ros2/build/vins/rosidl_generator_py/vins/_vins_s.ep.rosidl_typesupport_fastrtps_c.c

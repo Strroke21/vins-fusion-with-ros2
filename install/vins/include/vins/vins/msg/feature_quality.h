@@ -1,1 +1,0 @@
-/home/deathstroke/vins-fusion-ros2/build/vins/rosidl_generator_c/vins/msg/feature_quality.h

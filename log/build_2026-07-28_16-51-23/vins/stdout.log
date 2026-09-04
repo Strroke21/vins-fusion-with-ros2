@@ -1,3 +1,0 @@
-[  4%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/estimator/estimator.cpp.o[0m
-[  8%] [32mBuilding CXX object CMakeFiles/vins_lib.dir/src/utility/visualization.cpp.o[0m
-[ 13%] [32m[1mLinking CXX shared library libvins_lib.so[0m

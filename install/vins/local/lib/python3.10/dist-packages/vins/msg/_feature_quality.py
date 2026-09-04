@@ -1,1 +1,0 @@
-/home/deathstroke/vins-fusion-ros2/build/vins/rosidl_generator_py/vins/msg/_feature_quality.py

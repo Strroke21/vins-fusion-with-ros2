@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/deathstroke/vins-fusion-ros2/build/vins/rosidl_generator_py/vins/vins_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" "TARGETS" "vins__rosidl_typesupport_c__pyext" "DESTINATION" "local/lib/python3.10/dist-packages/vins")
