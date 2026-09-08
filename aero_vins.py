@@ -28,7 +28,7 @@ class VinsToFCBridge(Node):
 
         # MAVLink conection
         self.MAVLINK_URL =  'tcp:127.0.0.1:5762' #'udp:127.0.0.1:14550'
-        self.SOURCE_SYSTEM = 191
+        self.SOURCE_SYSTEM = 1
         self.SOURCE_COMPONENT = int(mavutil.mavlink.MAV_COMP_ID_VISUAL_INERTIAL_ODOMETRY)
 
         # Initial Yaw
