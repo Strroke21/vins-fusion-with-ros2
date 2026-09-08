@@ -128,7 +128,7 @@ class VinsToFCBridge(Node):
 
         # --- Covariance estimation / GPS fallback ---
         self.COV_WINDOW_SIZE = 3
-        self.COV_POSITION_THRESHOLD = 2
+        self.COV_POSITION_THRESHOLD = 10
         self.pos_buffer = deque(maxlen=self.COV_WINDOW_SIZE)
         self.pos_cov_hist = deque(maxlen=self.COV_WINDOW_SIZE)
         self.prev_p_N = None
