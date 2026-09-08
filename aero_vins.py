@@ -27,15 +27,15 @@ class VinsToFCBridge(Node):
         self.converted_odom_pub = self.create_publisher(Odometry, '/converted_odom', 10)
 
         # MAVLink conection
-        self.MAVLINK_URL = 'udp:127.0.0.1:14550'
+        self.MAVLINK_URL =  'tcp:127.0.0.1:5762' #'udp:127.0.0.1:14550'
         self.SOURCE_SYSTEM = 191
         self.SOURCE_COMPONENT = int(mavutil.mavlink.MAV_COMP_ID_VISUAL_INERTIAL_ODOMETRY)
 
         # Initial Yaw
-        self.YAW_INIT_SECONDS = 10.0
+        self.YAW_INIT_SECONDS = 5.0
 
         # Send rate
-        self.SEND_RATE_HZ = 10.0
+        self.SEND_RATE_HZ = 30.0
 
         # Estimator metadata
         self.QUALITY = 100
@@ -129,11 +129,8 @@ class VinsToFCBridge(Node):
         # --- Covariance estimation / GPS fallback ---
         self.COV_WINDOW_SIZE = 3
         self.COV_POSITION_THRESHOLD = 2
-        # self.COV_VELOCITY_THRESHOLD = 0.5
         self.pos_buffer = deque(maxlen=self.COV_WINDOW_SIZE)
-        self.vel_buffer = deque(maxlen=self.COV_WINDOW_SIZE)
         self.pos_cov_hist = deque(maxlen=self.COV_WINDOW_SIZE)
-        self.vel_cov_hist = deque(maxlen=self.COV_WINDOW_SIZE)
         self.prev_p_N = None
         self.vision_failed_latched = False
 
@@ -165,8 +162,7 @@ class VinsToFCBridge(Node):
         qos = QoSProfile(
             history=HistoryPolicy.KEEP_LAST,
             depth=200,
-            reliability=ReliabilityPolicy.BEST_EFFORT if self.QOS_BEST_EFFORT else ReliabilityPolicy.RELIABLE,
-        )
+            reliability=ReliabilityPolicy.BEST_EFFORT)
 
         self.sub = self.create_subscription(Odometry, self.ODOM_TOPIC, self.odom_cb, qos)
         self.imu_sub = self.create_subscription(Imu,'/camera/camera/imu',self.imu_cb,qos)
@@ -317,32 +313,8 @@ class VinsToFCBridge(Node):
             if odom_age > self.ODOM_TIMEOUT_SEC:
                 if not self.odom_timeout_latched:
                     self.get_logger().error(
-                        f'No /odometry received for {odom_age:.3f}s -> switching EKF source to GPS'
-                    )
-
-                    try:
-                        self.mav.mav.command_long_send(
-                            self.mav.target_system,
-                            self.mav.target_component,
-                            mavutil.mavlink.MAV_CMD_DO_AUX_FUNCTION,
-                            0,
-                            90,
-                            2,
-                            0, 0, 0, 0, 0
-                        )
-
-                        self.get_logger().error(
-                            'EKF source switched to GPS due to VINS odometry timeout'
-                        )
-
-                    except Exception as e:
-                        self.get_logger().error(
-                            f'Failed to switch EKF source to GPS: {e}'
-                        )
-
-                    self.odom_timeout_latched = True
-
-                return
+                        f'No /odometry received for {odom_age:.3f}s')
+                    
 
         if msg is None or not self.ready:
             return
@@ -372,29 +344,15 @@ class VinsToFCBridge(Node):
                 return
 
             cov_pose = np.array(odom['pose_covariance'], dtype=float)
-            vel_cov_full = np.array(odom['velocity_covariance'], dtype=float)
             pos_diag = np.array([cov_pose[0], cov_pose[6], cov_pose[11]], dtype=float)
-            vel_diag = np.array([vel_cov_full[0], vel_cov_full[6], vel_cov_full[11]], dtype=float)
-            gate_open, pos_mean, vel_mean = self.update_covariance_gate(pos_diag, vel_diag)
+            gate_open, pos_mean = self.update_covariance_gate(pos_diag)
 
             if not gate_open:
                 self.get_logger().error(
-                    f'Covariance threshold exceeded -> switching EKF source to GPS | '
-                    f'pos_mean={pos_mean.tolist()} vel_mean={vel_mean.tolist()} | '
-                    f'pos_th={self.COV_POSITION_THRESHOLD} vel_th={self.COV_VELOCITY_THRESHOLD}'
+                    f'Position covariance threshold exceeded| '
+                    f'pos_mean={pos_mean.tolist()} | '
+                    f'pos_th={self.COV_POSITION_THRESHOLD}'
                 )
-                try:
-                    self.mav.mav.command_long_send(
-                        self.mav.target_system,
-                        self.mav.target_component,
-                        mavutil.mavlink.MAV_CMD_DO_AUX_FUNCTION,
-                        0, 90, 2, 0, 0, 0, 0, 0
-                    )
-                    self.get_logger().error('EKF source switched to GPS due to covariance failure')
-                except Exception as e:
-                    self.get_logger().error(f'Failed to switch EKF source to GPS: {e}')
-                self.vision_failed_latched = True
-                return
 
             self.publish_converted_odom(msg, odom)
 
@@ -415,13 +373,6 @@ class VinsToFCBridge(Node):
                 #cov_pose
             )
 
-            # --- Build velocity covariance (3x3 flattened) ---
-            vel_cov = np.array([
-                vel_cov_full[0], 0, 0,
-                0, vel_cov_full[6], 0,
-                0, 0, vel_cov_full[11]
-            ])
-
             # --- Send VISION_SPEED_ESTIMATE ---
             # self.mav.mav.vision_speed_estimate_send(
             #     odom['time_usec'],
@@ -431,15 +382,12 @@ class VinsToFCBridge(Node):
             #     #vel_cov
             # )
 
-            msg = self.mav.recv_match("STATUSTEXT", blocking=True)
-
             self.get_logger().info(
                 f"time_usec:{odom['time_usec']},"
                 f"x:{odom['x']:.3f},y:{odom['y']:.3f},z:{odom['z']:.3f},"
                 f"q:{roll:.3f},{pitch:.3f},{yaw:.3f},"
                 f"vx:{odom['vx']:.3f},vy:{odom['vy']:.3f},vz:{odom['vz']:.3f}"
             )
-                        #self.get_logger().info(f"[messages: {msg}")
         except Exception as e:
             self.get_logger().warn(f'Failed to send vision estimate: {e}')
 
@@ -534,7 +482,6 @@ class VinsToFCBridge(Node):
             self.prev_p_N = p_N.copy()
 
         self.pos_buffer.append(delta_p)
-        self.vel_buffer.append(v_N.copy())
 
         #self.get_logger().info(f'p_N: {p_N}')
         #self.get_logger().info(f'v_N: {v_N}')
@@ -551,12 +498,9 @@ class VinsToFCBridge(Node):
 
         if len(self.pos_buffer) < self.COV_WINDOW_SIZE:
             var_dx, var_dy, var_dz = 0.05, 0.05, 0.05
-            var_vx, var_vy, var_vz = 0.1, 0.1, 0.1
         else:
             pos_arr = np.array(self.pos_buffer)
-            vel_arr = np.array(self.vel_buffer)
             var_dx, var_dy, var_dz = np.var(pos_arr, axis=0)
-            var_vx, var_vy, var_vz = np.var(vel_arr, axis=0)
 
         def clamp(v, vmin, vmax):
             return max(vmin, min(vmax, float(v)))
@@ -564,9 +508,6 @@ class VinsToFCBridge(Node):
         var_dx = clamp(var_dx, 0.001, 50.0)
         var_dy = clamp(var_dy, 0.001, 50.0)
         var_dz = clamp(var_dz, 0.001, 50.0)
-        var_vx = clamp(var_vx, 0.001, 20.0)
-        var_vy = clamp(var_vy, 0.001, 20.0)
-        var_vz = clamp(var_vz, 0.001, 20.0)
 
         pose_cov_6x6 = np.zeros((6, 6))
         pose_cov_6x6[0, 0] = var_dx
@@ -576,16 +517,10 @@ class VinsToFCBridge(Node):
         pose_cov_6x6[4, 4] = 0.04
         pose_cov_6x6[5, 5] = 0.04
 
-        vel_cov_6x6 = np.zeros((6, 6))
-        vel_cov_6x6[0, 0] = var_vx
-        vel_cov_6x6[1, 1] = var_vy
-        vel_cov_6x6[2, 2] = var_vz
-        vel_cov_6x6[3, 3] = 0.04
-        vel_cov_6x6[4, 4] = 0.04
-        vel_cov_6x6[5, 5] = 0.04
-
         pose_covariance = self.ros_cov36_to_mav_upper21(pose_cov_6x6.reshape(36))
-        velocity_covariance = self.ros_cov36_to_mav_upper21(vel_cov_6x6.reshape(36))
+
+        # Velocity covariance is intentionally not computed or used.
+        velocity_covariance = [0.0] * 21
 
         quality = max(-1, min(100, self.QUALITY))
 
@@ -612,18 +547,16 @@ class VinsToFCBridge(Node):
             'quality': int(quality),
         }
 
-    def update_covariance_gate(self, pos_diag, vel_diag):
+    def update_covariance_gate(self, pos_diag):
         pos_diag = np.array(pos_diag, dtype=float)
-        vel_diag = np.array(vel_diag, dtype=float)
         self.pos_cov_hist.append(pos_diag)
-        self.vel_cov_hist.append(vel_diag)
+
         if len(self.pos_cov_hist) < self.COV_WINDOW_SIZE:
-            return True, pos_diag, vel_diag
+            return True, pos_diag
+
         pos_mean = np.mean(np.array(self.pos_cov_hist), axis=0)
-        # vel_mean = np.mean(np.array(self.vel_cov_hist), axis=0)
         pos_bad = np.any(pos_mean > self.COV_POSITION_THRESHOLD)
-        # vel_bad = np.any(vel_mean > self.COV_VELOCITY_THRESHOLD)
-        return not pos_bad , pos_mean
+        return not pos_bad, pos_mean
 
     @staticmethod
     def wrap_pi(a: float) -> float:
