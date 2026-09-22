@@ -315,17 +315,17 @@ vins__rosidl_typesupport_cpp/fast:
 .PHONY : vins__rosidl_typesupport_cpp/fast
 
 #=============================================================================
-# Target rules for targets named ament_cmake_python_copy_vins
+# Target rules for targets named ament_cmake_python_symlink_vins
 
 # Build rule for target.
-ament_cmake_python_copy_vins: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ament_cmake_python_copy_vins
-.PHONY : ament_cmake_python_copy_vins
+ament_cmake_python_symlink_vins: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ament_cmake_python_symlink_vins
+.PHONY : ament_cmake_python_symlink_vins
 
 # fast build rule for target.
-ament_cmake_python_copy_vins/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_copy_vins.dir/build.make CMakeFiles/ament_cmake_python_copy_vins.dir/build
-.PHONY : ament_cmake_python_copy_vins/fast
+ament_cmake_python_symlink_vins/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_symlink_vins.dir/build.make CMakeFiles/ament_cmake_python_symlink_vins.dir/build
+.PHONY : ament_cmake_python_symlink_vins/fast
 
 #=============================================================================
 # Target rules for targets named ament_cmake_python_build_vins_egg
@@ -1228,7 +1228,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... ament_cmake_python_build_vins_egg"
-	@echo "... ament_cmake_python_copy_vins"
+	@echo "... ament_cmake_python_symlink_vins"
 	@echo "... uninstall"
 	@echo "... vins"
 	@echo "... vins__cpp"

@@ -101,7 +101,7 @@ clean: CMakeFiles/vins__rosidl_typesupport_introspection_c.dir/clean
 clean: CMakeFiles/vins__rosidl_typesupport_c.dir/clean
 clean: CMakeFiles/vins__rosidl_typesupport_introspection_cpp.dir/clean
 clean: CMakeFiles/vins__rosidl_typesupport_cpp.dir/clean
-clean: CMakeFiles/ament_cmake_python_copy_vins.dir/clean
+clean: CMakeFiles/ament_cmake_python_symlink_vins.dir/clean
 clean: CMakeFiles/ament_cmake_python_build_vins_egg.dir/clean
 clean: CMakeFiles/vins__rosidl_generator_py.dir/clean
 clean: CMakeFiles/vins__rosidl_typesupport_fastrtps_c__pyext.dir/clean
@@ -440,36 +440,36 @@ CMakeFiles/vins__rosidl_typesupport_cpp.dir/clean:
 .PHONY : CMakeFiles/vins__rosidl_typesupport_cpp.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/ament_cmake_python_copy_vins.dir
+# Target rules for target CMakeFiles/ament_cmake_python_symlink_vins.dir
 
 # All Build rule for target.
-CMakeFiles/ament_cmake_python_copy_vins.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_copy_vins.dir/build.make CMakeFiles/ament_cmake_python_copy_vins.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_copy_vins.dir/build.make CMakeFiles/ament_cmake_python_copy_vins.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/CMakeFiles --progress-num= "Built target ament_cmake_python_copy_vins"
-.PHONY : CMakeFiles/ament_cmake_python_copy_vins.dir/all
+CMakeFiles/ament_cmake_python_symlink_vins.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_symlink_vins.dir/build.make CMakeFiles/ament_cmake_python_symlink_vins.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_symlink_vins.dir/build.make CMakeFiles/ament_cmake_python_symlink_vins.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/CMakeFiles --progress-num= "Built target ament_cmake_python_symlink_vins"
+.PHONY : CMakeFiles/ament_cmake_python_symlink_vins.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/ament_cmake_python_copy_vins.dir/rule: cmake_check_build_system
+CMakeFiles/ament_cmake_python_symlink_vins.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/CMakeFiles 0
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ament_cmake_python_copy_vins.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ament_cmake_python_symlink_vins.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/CMakeFiles 0
-.PHONY : CMakeFiles/ament_cmake_python_copy_vins.dir/rule
+.PHONY : CMakeFiles/ament_cmake_python_symlink_vins.dir/rule
 
 # Convenience name for target.
-ament_cmake_python_copy_vins: CMakeFiles/ament_cmake_python_copy_vins.dir/rule
-.PHONY : ament_cmake_python_copy_vins
+ament_cmake_python_symlink_vins: CMakeFiles/ament_cmake_python_symlink_vins.dir/rule
+.PHONY : ament_cmake_python_symlink_vins
 
 # clean rule for target.
-CMakeFiles/ament_cmake_python_copy_vins.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_copy_vins.dir/build.make CMakeFiles/ament_cmake_python_copy_vins.dir/clean
-.PHONY : CMakeFiles/ament_cmake_python_copy_vins.dir/clean
+CMakeFiles/ament_cmake_python_symlink_vins.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_symlink_vins.dir/build.make CMakeFiles/ament_cmake_python_symlink_vins.dir/clean
+.PHONY : CMakeFiles/ament_cmake_python_symlink_vins.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/ament_cmake_python_build_vins_egg.dir
 
 # All Build rule for target.
-CMakeFiles/ament_cmake_python_build_vins_egg.dir/all: CMakeFiles/ament_cmake_python_copy_vins.dir/all
+CMakeFiles/ament_cmake_python_build_vins_egg.dir/all: CMakeFiles/ament_cmake_python_symlink_vins.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_build_vins_egg.dir/build.make CMakeFiles/ament_cmake_python_build_vins_egg.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ament_cmake_python_build_vins_egg.dir/build.make CMakeFiles/ament_cmake_python_build_vins_egg.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins/CMakeFiles --progress-num= "Built target ament_cmake_python_build_vins_egg"

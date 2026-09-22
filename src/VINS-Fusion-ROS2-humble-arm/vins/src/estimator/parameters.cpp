@@ -238,13 +238,13 @@ void readParameters(std::string config_file)
     // files that don't have these keys yet still work; override in YAML
     // once tuned against real flight logs.
     cv::FileNode gateCloseNode = fsSettings["visual_gate_close_thresh"];
-    VISUAL_GATE_CLOSE_THRESH = gateCloseNode.empty() ? 80 : (int)gateCloseNode;
+    VISUAL_GATE_CLOSE_THRESH = gateCloseNode.empty() ? 10 : (int)gateCloseNode;
 
     cv::FileNode gateLastTrackNode = fsSettings["visual_gate_reopen_last_track"];
-    VISUAL_GATE_REOPEN_LAST_TRACK = gateLastTrackNode.empty() ? 20 : (int)gateLastTrackNode;
+    VISUAL_GATE_REOPEN_LAST_TRACK = gateLastTrackNode.empty() ? 5 : (int)gateLastTrackNode;
 
     cv::FileNode gateLongTrackNode = fsSettings["visual_gate_reopen_long_track"];
-    VISUAL_GATE_REOPEN_LONG_TRACK = gateLongTrackNode.empty() ? 40 : (int)gateLongTrackNode;
+    VISUAL_GATE_REOPEN_LONG_TRACK = gateLongTrackNode.empty() ? 5 : (int)gateLongTrackNode;
 
     cv::FileNode gateBackendNode = fsSettings["visual_gate_reopen_backend"];
     VISUAL_GATE_REOPEN_BACKEND = gateBackendNode.empty() ? VISUAL_GATE_CLOSE_THRESH : (int)gateBackendNode;
