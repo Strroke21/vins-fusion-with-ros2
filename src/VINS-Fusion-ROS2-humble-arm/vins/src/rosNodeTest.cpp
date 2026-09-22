@@ -63,6 +63,39 @@ cv::Mat getImageFromMsg(const sensor_msgs::msg::Image::ConstPtr &img_msg)
         img.encoding = "mono8";
         ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::MONO8);
     }
+
+    else if (img_msg->encoding == "uyvy" || img_msg->encoding == "UYVY")
+        {
+            sensor_msgs::msg::Image img;
+            img.header = img_msg->header;
+            img.height = img_msg->height;
+            img.width = img_msg->width;
+            img.is_bigendian = img_msg->is_bigendian;
+
+            // UYVY has 2 bytes per pixel
+            img.encoding = sensor_msgs::image_encodings::MONO8;
+            img.step = img.width;
+            img.data.resize(img.height * img.step);
+
+            for (size_t y = 0; y < img.height; ++y)
+            {
+                const uint8_t* src = img_msg->data.data() + y * img_msg->step;
+                uint8_t* dst = img.data.data() + y * img.step;
+
+                for (size_t x = 0; x < img.width; ++x)
+                {
+                    // UYVY: U Y V Y
+                    // Y is at byte positions 1, 3, 5, ...
+                    dst[x] = src[2 * x + 1];
+                }
+            }
+
+            ptr = cv_bridge::toCvCopy(
+                img,
+                sensor_msgs::image_encodings::MONO8
+            );
+        }
+
     else
         ptr = cv_bridge::toCvCopy(img_msg, sensor_msgs::image_encodings::MONO8);
 
