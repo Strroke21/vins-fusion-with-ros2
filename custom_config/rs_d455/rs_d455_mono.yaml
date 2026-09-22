@@ -61,7 +61,7 @@ gyr_w: 0.11307      # gyroscope bias random work noise standard deviation.
 g_norm: 9.81007     # gravity magnitude
 
 #initialisation params
-visual_gate_close_thresh: 5 #backend feature count to stop feeding visual features to optimizer
+visual_gate_close_thresh: 1 #backend feature count to stop feeding visual features to optimizer
 visual_gate_reopen_last_track: 120 #LK tracked feature count
 visual_gate_reopen_long_track: 120 #LK tracked feature count for more than 5 frames
 visual_gate_reopen_backend: 60 #triangulated feature count that goes in backend

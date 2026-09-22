@@ -11,7 +11,6 @@
 
 #include "feature_tracker.h"
 
-FeatureQualityData g_feature_quality;
 bool FeatureTracker::inBorder(const cv::Point2f &pt)
 {
     const int BORDER_SIZE = 1;
@@ -106,20 +105,18 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
 {
     TicToc t_r;
     cur_time = _cur_time;
-    static int frame_count = 0;
-    frame_count++;
     cur_img = _img;
     row = cur_img.rows;
     col = cur_img.cols;
     cv::Mat rightImg = _img1;
-    
+    /*
     {
         cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(3.0, cv::Size(8, 8));
         clahe->apply(cur_img, cur_img);
         if(!rightImg.empty())
             clahe->apply(rightImg, rightImg);
     }
-    
+    */
     cur_pts.clear();
 
     if (prev_pts.size() > 0)
@@ -167,7 +164,7 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
             }
             // printf("temporal optical flow costs: %fms\n", t_o.toc());
         }
-#if GPU_MODE
+#ifdef GPU_MODE
         else
         {
             TicToc t_og;
@@ -261,28 +258,6 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
         reduceVector(cur_pts, status);
         reduceVector(ids, status);
         reduceVector(track_cnt, status);
-
-        int tracked_features = cur_pts.size();
-
-        int long_tracks = 0;
-        for (auto &cnt : track_cnt)
-        {
-            if (cnt > 5)
-                long_tracks++;
-        }
-
-        if (frame_count % 10 == 0)
-        {            
-            std::cout << "[FeatureTracker] "
-                      << "t=" << cur_time
-                      << " tracked=" << tracked_features
-                      << " long_tracks_gt_5=" << long_tracks
-                      << " new=" << n_pts.size()
-                      << " total=" << cur_pts.size()
-                      << std::endl;
-        }
-        
-        
         // ROS_DEBUG("temporal optical flow costs: %fms", t_o.toc());
         
         //printf("track cnt %d\n", (int)ids.size());
@@ -293,7 +268,7 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
 
     if (1)
     {
-        rejectWithF();
+        //rejectWithF();
         ROS_DEBUG("set mask begins");
         TicToc t_m;
         setMask();
@@ -313,14 +288,14 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
                     cout << "mask type wrong " << endl;
                 cv::goodFeaturesToTrack(cur_img, n_pts, MAX_CNT - cur_pts.size(), 0.01, MIN_DIST, mask);
                 // printf("good feature to track costs: %fms\n", t_t.toc());
-                //std::cout << "n_pts size: "<< n_pts.size()<<std::endl;
+                std::cout << "n_pts size: "<< n_pts.size()<<std::endl;
             }
             else
                 n_pts.clear();
             // sum_n += n_pts.size();
             // printf("total point from non-gpu: %d\n",sum_n);
         }
-#if GPU_MODE
+#ifdef GPU_MODE
         // ROS_DEBUG("detect feature costs: %fms", t_t.toc());
         // printf("good feature to track costs: %fms\n", t_t.toc());
         else
@@ -357,49 +332,6 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
         ROS_DEBUG("add feature begins");
         TicToc t_a;
         addPoints();
-        
-        int total_features = cur_pts.size();
-
-        int new_features = 0;
-        int tracked_features = 0;
-        int long_tracks_gt_5 = 0;
-
-        for (auto &cnt : track_cnt)
-        {
-            if (cnt == 1)
-                new_features++;
-
-            if (cnt > 1)
-                tracked_features++;
-
-            if (cnt > 5)
-                long_tracks_gt_5++;
-        }
-
-        g_feature_quality.valid = true;
-        g_feature_quality.time = cur_time;
-        g_feature_quality.tracked = tracked_features;
-        g_feature_quality.long5 = long_tracks_gt_5;
-        g_feature_quality.new_features = new_features;
-        g_feature_quality.total = total_features;
-
-        latest_tracked = tracked_features;
-        latest_long_tracks_gt_5 = long_tracks_gt_5;
-
-        ROS_INFO(
-            "t=%.3f tracked=%d long5=%d new=%d total=%d",
-            cur_time,
-            tracked_features,
-            long_tracks_gt_5,
-            new_features,
-            total_features);
-        
-        //if (frame_count % 10 == 0)
-        //{
-            //std::cout << "[FeatureTracker] "
-                      //<< "total_after_addPoints=" << cur_pts.size()
-                      //<< std::endl;
-        //}
         // ROS_DEBUG("selectFeature costs: %fms", t_a.toc());
         // printf("selectFeature costs: %fms\n", t_a.toc());
     }
@@ -440,7 +372,7 @@ map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> FeatureTracker::trackIm
                 }
                 // printf("left right optical flow cost %fms\n",t_check.toc());
             }
-#if GPU_MODE
+#ifdef GPU_MODE
             else
             {
                 TicToc t_og1;

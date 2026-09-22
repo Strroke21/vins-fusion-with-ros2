@@ -63,12 +63,6 @@ class FeaturePerFrame
     Vector2d uv, uvRight;
     Vector2d velocity, velocityRight;
     bool is_stereo;
-    // True if this observation was recorded while the visual feature gate
-    // was closed. Gated observations stay in feature_manager for bookkeeping
-    // (track length, parallax, reopen-signal counts) but are excluded from
-    // every residual built in Estimator::optimization(), for the lifetime
-    // of the observation, including at marginalization time.
-    bool gated = false;
 };
 
 class FeaturePerId
@@ -120,11 +114,6 @@ class FeatureManager
     double last_average_parallax;
     int new_feature_num;
     int long_track_num;
-    // Set by Estimator before each addFeatureCheckParallax() call. Does not
-    // affect tracking/parallax bookkeeping at all -- only tags newly-recorded
-    // observations (FeaturePerFrame::gated) so Estimator::optimization() can
-    // exclude them. Defaults open so nothing changes until Estimator opts in.
-    bool visual_gate_open = true;
 
   private:
     double compensatedParallax2(const FeaturePerId &it_per_id, int frame_count);
