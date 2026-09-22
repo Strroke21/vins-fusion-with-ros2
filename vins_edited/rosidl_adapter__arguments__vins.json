@@ -1,0 +1,6 @@
+{
+  "package_name": "vins",
+  "non_idl_tuples": [
+    "/home/deathstroke/vins-fusion-ros2/src/VINS-Fusion-ROS2-humble-arm/vins:msg/FeatureQuality.msg"
+  ]
+}

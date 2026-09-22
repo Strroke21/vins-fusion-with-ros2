@@ -1,0 +1,47 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from vins/msg/FeatureQuality.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module vins {
+  module msg {
+    struct FeatureQuality {
+      std_msgs::msg::Header header;
+
+      int32 tracked;
+
+      int32 long_tracks_gt_5;
+
+      int32 new_features;
+
+      int32 total;
+
+      int32 visual_features;
+
+      double vx;
+
+      double vy;
+
+      double vz;
+
+      double velocity_norm;
+
+      double ba_x;
+
+      double ba_y;
+
+      double ba_z;
+
+      double ba_norm;
+
+      double bg_x;
+
+      double bg_y;
+
+      double bg_z;
+
+      double bg_norm;
+    };
+  };
+};
