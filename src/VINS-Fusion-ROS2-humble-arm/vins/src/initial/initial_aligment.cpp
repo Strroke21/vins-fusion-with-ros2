@@ -11,7 +11,7 @@
 
 #include "initial_alignment.h"
 
-void solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs)
+bool solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs)
 {
     Matrix3d A;
     Vector3d b;
@@ -33,8 +33,26 @@ void solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs)
         A += tmp_A.transpose() * tmp_A;
         b += tmp_A.transpose() * tmp_b;
     }
+
+    // A is symmetric PSD by construction (sum of tmp_A^T*tmp_A). A poorly
+    // conditioned A -- too little genuine multi-axis rotation in this
+    // window -- can still produce a confident-looking but wrong delta_bg
+    // from ldlt(), which then feeds forward into everything LinearAlignment
+    // fits downstream. Catch that here, before it becomes drifting Ba five
+    // seconds later.
+    Eigen::SelfAdjointEigenSolver<Matrix3d> eigenSolver(A);
+    double minEig = eigenSolver.eigenvalues().minCoeff();
+    double maxEig = eigenSolver.eigenvalues().maxCoeff();
+    double conditionRatio = (maxEig > 1e-12) ? (minEig / maxEig) : 0.0;
+    if (conditionRatio < GYRO_BIAS_MIN_COND_RATIO)
+    {
+        ROS_WARN("gyroscope bias solve rejected: condition ratio %f < %f (min/max eigenvalue of A) -- window lacks multi-axis rotation",
+                 conditionRatio, GYRO_BIAS_MIN_COND_RATIO);
+        return false;
+    }
+
     delta_bg = A.ldlt().solve(b);
-    ROS_WARN("gyroscope bias initial calibration "); // << delta_bg.transpose());
+    ROS_WARN("gyroscope bias initial calibration, condition ratio %f, delta_bg norm %f", conditionRatio, delta_bg.norm());
 
     for (int i = 0; i <= WINDOW_SIZE; i++)
         Bgs[i] += delta_bg;
@@ -44,6 +62,7 @@ void solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs)
         frame_j = next(frame_i);
         frame_j->second.pre_integration->repropagate(Vector3d::Zero(), Bgs[0]);
     }
+    return true;
 }
 
 
@@ -77,8 +96,16 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
 
     map<double, ImageFrame>::iterator frame_i;
     map<double, ImageFrame>::iterator frame_j;
-    for(int k = 0; k < 4; k++)
+    // Convergence-driven instead of a fixed iteration count: a clean window
+    // may settle in 2 iterations with room to spare, a marginal one may
+    // still be moving meaningfully at iteration 4 and previously got cut off
+    // there regardless, indistinguishable in the output from a converged run.
+    const int max_iterations = 10;
+    const double convergence_threshold = 1e-4; // norm of the per-iteration gravity-direction update, dg
+    int iterations_used = 0;
+    for(int k = 0; k < max_iterations; k++)
     {
+        iterations_used = k + 1;
         MatrixXd lxly(3, 2);
         lxly = TangentBasis(g0);
         int i = 0;
@@ -105,10 +132,26 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
             tmp_b.block<3, 1>(3, 0) = frame_j->second.pre_integration->delta_v - frame_i->second.R.transpose() * dt * Matrix3d::Identity() * g0;
 
 
-            Matrix<double, 6, 6> cov_inv = Matrix<double, 6, 6>::Zero();
-            //cov.block<6, 6>(0, 0) = IMU_cov[i + 1];
-            //MatrixXd cov_inv = cov.inverse();
-            cov_inv.setIdentity();
+            // Real per-pair weighting instead of identity: pull the P/V
+            // sub-block (with cross terms) out of this pair's actual
+            // propagated preintegration covariance -- the same covariance
+            // the main sliding-window IMU factor already trusts for its own
+            // residual weighting (imu_factor.h). A pair with a short dt or
+            // otherwise higher genuine uncertainty now has proportionally
+            // less influence on the joint solve, instead of counting exactly
+            // as much as the best pair in the window.
+            Matrix<double, 6, 6> pv_cov;
+            pv_cov.block<3, 3>(0, 0) = frame_j->second.pre_integration->covariance.block<3, 3>(O_P, O_P);
+            pv_cov.block<3, 3>(0, 3) = frame_j->second.pre_integration->covariance.block<3, 3>(O_P, O_V);
+            pv_cov.block<3, 3>(3, 0) = frame_j->second.pre_integration->covariance.block<3, 3>(O_V, O_P);
+            pv_cov.block<3, 3>(3, 3) = frame_j->second.pre_integration->covariance.block<3, 3>(O_V, O_V);
+
+            Matrix<double, 6, 6> cov_inv;
+            Eigen::FullPivLU<Matrix<double, 6, 6>> lu(pv_cov);
+            if (lu.isInvertible())
+                cov_inv = pv_cov.inverse();
+            else
+                cov_inv = Matrix<double, 6, 6>::Identity(); // fallback for this one pair only -- shouldn't normally trigger
 
             MatrixXd r_A = tmp_A.transpose() * cov_inv * tmp_A;
             VectorXd r_b = tmp_A.transpose() * cov_inv * tmp_b;
@@ -128,7 +171,10 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
             VectorXd dg = x.segment<2>(n_state - 3);
             g0 = (g0 + lxly * dg).normalized() * G.norm();
             //double s = x(n_state - 1);
-    }   
+            if (dg.norm() < convergence_threshold)
+                break;
+    }
+    ROS_INFO("gravity refinement: %d/%d iterations used (final update norm-based convergence)", iterations_used, max_iterations);
     g = g0;
 }
 
@@ -167,10 +213,19 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
         tmp_b.block<3, 1>(3, 0) = frame_j->second.pre_integration->delta_v;
         //cout << "delta_v   " << frame_j->second.pre_integration->delta_v.transpose() << endl;
 
-        Matrix<double, 6, 6> cov_inv = Matrix<double, 6, 6>::Zero();
-        //cov.block<6, 6>(0, 0) = IMU_cov[i + 1];
-        //MatrixXd cov_inv = cov.inverse();
-        cov_inv.setIdentity();
+        // Same real per-pair weighting as RefineGravity, same reasoning.
+        Matrix<double, 6, 6> pv_cov;
+        pv_cov.block<3, 3>(0, 0) = frame_j->second.pre_integration->covariance.block<3, 3>(O_P, O_P);
+        pv_cov.block<3, 3>(0, 3) = frame_j->second.pre_integration->covariance.block<3, 3>(O_P, O_V);
+        pv_cov.block<3, 3>(3, 0) = frame_j->second.pre_integration->covariance.block<3, 3>(O_V, O_P);
+        pv_cov.block<3, 3>(3, 3) = frame_j->second.pre_integration->covariance.block<3, 3>(O_V, O_V);
+
+        Matrix<double, 6, 6> cov_inv;
+        Eigen::FullPivLU<Matrix<double, 6, 6>> lu(pv_cov);
+        if (lu.isInvertible())
+            cov_inv = pv_cov.inverse();
+        else
+            cov_inv = Matrix<double, 6, 6>::Identity(); // fallback for this one pair only -- shouldn't normally trigger
 
         MatrixXd r_A = tmp_A.transpose() * cov_inv * tmp_A;
         VectorXd r_b = tmp_A.transpose() * cov_inv * tmp_b;
@@ -208,7 +263,8 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
 
 bool VisualIMUAlignment(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs, Vector3d &g, VectorXd &x)
 {
-    solveGyroscopeBias(all_image_frame, Bgs);
+    if (!solveGyroscopeBias(all_image_frame, Bgs))
+        return false;
 
     if(LinearAlignment(all_image_frame, g, x))
         return true;

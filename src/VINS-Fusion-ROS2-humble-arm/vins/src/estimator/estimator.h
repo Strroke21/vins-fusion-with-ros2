@@ -11,12 +11,16 @@
  
 #include <thread>
 #include <mutex>
+#include <deque>
+#include <limits>
 #include <std_msgs/msg/header.h>
 #include <std_msgs/msg/float32.h>
 #include <ceres/ceres.h>
 #include <unordered_map>
 #include <queue>
 #include <opencv2/core/eigen.hpp>
+#include <opencv2/features2d.hpp>
+#include <opencv2/calib3d.hpp>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Geometry>
 
@@ -34,12 +38,23 @@
 #include "../factor/projectionTwoFrameOneCamFactor.h"
 #include "../factor/projectionTwoFrameTwoCamFactor.h"
 #include "../factor/projectionOneFrameTwoCamFactor.h"
+#include "../factor/projection_fixed_point_factor.h"
 #include "../featureTracker/feature_tracker.h"
 
 #define ROS_INFO RCUTILS_LOG_INFO
 #define ROS_WARN RCUTILS_LOG_WARN
 #define ROS_ERROR RCUTILS_LOG_ERROR
 
+// One entry in the short-horizon local relocalization bank (Part 3): a 3D
+// point in world frame, from an already-triangulated, gate-open feature,
+// plus the ORB descriptor of the pixel it was seen at. No capture pose is
+// stored -- matching/PnP only needs the point's world position, not the pose
+// it happened to be observed from.
+struct LocalMapPoint
+{
+    Eigen::Vector3d point_world;
+    cv::Mat descriptor;
+};
 
 class Estimator
 {
@@ -83,6 +98,30 @@ class Estimator
     void fastPredictIMU(double t, Eigen::Vector3d linear_acceleration, Eigen::Vector3d angular_velocity);
     bool IMUAvailable(double t);
     void initFirstIMUPose(vector<pair<double, Eigen::Vector3d>> &accVector);
+    // Evaluates the visual feature gate using this frame's fresh tracking
+    // signals (last_track_num, long_track_num, backend feature count) and
+    // updates visualGateOpen for next frame's observations. IMU preintegration
+    // is never affected -- only whether new visual observations get tagged
+    // for exclusion from the optimizer. Only runs once solver_flag == NON_LINEAR.
+    void updateVisualGate();
+    // Part 3: populates the bank from currently-visible, well-triangulated
+    // features while the gate is open (called every frame; cheap, no-op
+    // unless something new qualifies).
+    void updateLocalMapBank();
+    // Matches the current frame against the bank, PnP-RANSACs a pose, and --
+    // only if enough inliers survive -- stages {point_world, normalized ray}
+    // pairs in localMapFactorPoints for optimization() to consume this cycle.
+    // Called only while the gate is closed.
+    void relocalizeAgainstLocalMap();
+    // Small, throwaway solve (not the main window problem) that ties this
+    // frame's Vs/Bas/Bgs -- not just Pose/Ex_Pose -- to whatever
+    // localMapFactorPoints this cycle's relocalizeAgainstLocalMap() produced,
+    // via the real IMU factor linking frame_count-1 (held fixed) to
+    // frame_count. No-op if localMapFactorPoints is empty. Writes its result
+    // directly into Ps/Rs/Vs/Bas/Bgs[frame_count] as a warm start for the
+    // main optimization() call that follows -- never touches para_Pose/
+    // para_SpeedBias or the main ceres::Problem itself.
+    void correctSpeedBiasFromRelocalization();
 
     enum SolverFlag
     {
@@ -146,6 +185,19 @@ class Estimator
     bool first_imu;
     bool is_valid, is_key;
     bool failure_occur;
+
+    // Visual feature gate state. visualGateOpen mirrors what gets written to
+    // f_manager.visual_gate_open before each addFeatureCheckParallax() call.
+    bool visualGateOpen;
+    int visualGateReopenStreak;
+
+    // Part 3: local relocalization bank state. localMapFactorPoints is
+    // cleared and repopulated every processImage() cycle -- it is never
+    // carried across cycles, so a factor built from it lives for exactly one
+    // optimization() call and can never reach the marginalization prior.
+    cv::Ptr<cv::ORB> localMapOrb;
+    std::deque<LocalMapPoint> localMapBank;
+    std::vector<std::pair<Eigen::Vector3d, Eigen::Vector3d>> localMapFactorPoints;
 
     vector<Vector3d> point_cloud;
     vector<Vector3d> margin_cloud;

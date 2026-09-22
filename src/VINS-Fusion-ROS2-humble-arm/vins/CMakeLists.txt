@@ -11,6 +11,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rcpputils REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
@@ -35,7 +36,15 @@ include_directories(
   ${EIGEN3_INCLUDE_DIR}
 )
 
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/FeatureQuality.msg"
+  DEPENDENCIES std_msgs
+)
+ament_export_dependencies(rosidl_default_runtime)
 
+include_directories(
+  ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp
+)
 add_library(vins_lib
     src/estimator/parameters.cpp
     src/estimator/estimator.cpp
@@ -43,6 +52,7 @@ add_library(vins_lib
     src/factor/pose_local_parameterization.cpp
     src/factor/projectionTwoFrameOneCamFactor.cpp
     src/factor/projectionTwoFrameTwoCamFactor.cpp
+    src/factor/projection_fixed_point_factor.cpp
     src/factor/projectionOneFrameTwoCamFactor.cpp
     src/factor/marginalization_factor.cpp
     src/utility/utility.cpp
@@ -59,8 +69,13 @@ ament_target_dependencies(vins_lib rclcpp rcpputils std_msgs visualization_msgs 
 
 add_executable(vins_node src/rosNodeTest.cpp)
 ament_target_dependencies(vins_node rclcpp rcpputils std_msgs visualization_msgs geometry_msgs nav_msgs tf2 tf2_ros cv_bridge camera_models image_transport)
-target_link_libraries(vins_node vins_lib) 
+rosidl_get_typesupport_target(cpp_typesupport_target
+  ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
+target_link_libraries(vins_node
+  vins_lib
+  "${cpp_typesupport_target}"
+)
 add_executable(kitti_odom_test src/KITTIOdomTest.cpp)
 ament_target_dependencies(kitti_odom_test rclcpp rcpputils std_msgs visualization_msgs geometry_msgs nav_msgs tf2 tf2_ros cv_bridge camera_models image_transport)
 target_link_libraries(kitti_odom_test vins_lib) 
@@ -84,13 +99,12 @@ install(
 )
 
 
-
 # Install binaries
-#install(TARGETS vins_node kitti_odom_test kitti_gps_test vins_lib
-#    ARCHIVE DESTINATION lib
-#    LIBRARY DESTINATION lib
-#    RUNTIME DESTINATION bin
-#)
+install(TARGETS vins_node kitti_odom_test kitti_gps_test vins_lib
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
 
 # Install launch files
 #install(DIRECTORY

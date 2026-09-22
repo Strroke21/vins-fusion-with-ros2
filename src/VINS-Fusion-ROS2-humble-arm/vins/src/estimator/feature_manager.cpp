@@ -62,6 +62,7 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     for (auto &id_pts : image)
     {
         FeaturePerFrame f_per_fra(id_pts.second[0].second, td);
+        f_per_fra.gated = !visual_gate_open;
         assert(id_pts.second[0].first == 0);
         if(id_pts.second.size() == 2)
         {

@@ -14,6 +14,7 @@ Estimator::Estimator(): f_manager{Rs}
 {
     ROS_INFO("init begins");
     initThreadFlag = false;
+    localMapOrb = cv::ORB::create();
     clearState();
 }
 
@@ -74,6 +75,11 @@ void Estimator::clearState()
     sum_of_front = 0;
     frame_count = 0;
     solver_flag = INITIAL;
+    visualGateOpen = true;
+    visualGateReopenStreak = 0;
+    f_manager.visual_gate_open = true;
+    localMapBank.clear();
+    localMapFactorPoints.clear();
     initial_timestamp = 0;
     all_image_frame.clear();
 
@@ -112,6 +118,7 @@ void Estimator::setParameter()
     ProjectionTwoFrameOneCamFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
     ProjectionTwoFrameTwoCamFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
     ProjectionOneFrameTwoCamFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
+    ProjectionFixedPointFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
     td = TD;
     g = G;
     cout << "set g " << g.transpose() << endl;
@@ -348,7 +355,7 @@ void Estimator::processMeasurements()
             printStatistics(*this, 0);
 
             std_msgs::msg::Header header;
-            header.frame_id = "world";
+            header.frame_id = WORLD_FRAME_ID;
 
             int sec_ts = (int)feature.first;
             uint nsec_ts = (uint)((feature.first - sec_ts) * 1e9);
@@ -459,6 +466,11 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 
     ROS_DEBUG("new image coming ------------------------------------------");
     ROS_DEBUG("Adding feature points %lu", image.size());
+    // Carry over the gate decision from the end of last frame's processing.
+    // This frame's own observations get tagged with it; whether the gate
+    // should change state is only known after this frame's tracking data
+    // has been ingested, so that decision happens below via updateVisualGate().
+    f_manager.visual_gate_open = visualGateOpen;
     if (f_manager.addFeatureCheckParallax(frame_count, image, td))
     {
         marginalization_flag = MARGIN_OLD;
@@ -588,6 +600,24 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
             f_manager.initFramePoseByPnP(frame_count, Ps, Rs, tic, ric);
         f_manager.triangulate(frame_count, Ps, Rs, tic, ric);
 
+        // Part 3: use the gate state this frame was actually tagged under
+        // (visualGateOpen, not yet updated for next frame) to decide whether
+        // this cycle banks new landmarks or attempts relocalization against
+        // existing ones. localMapFactorPoints is cleared every cycle so a
+        // stale match can never leak into a later frame's optimization().
+        localMapFactorPoints.clear();
+        if (LOCAL_MAP_ENABLE)
+        {
+            if (visualGateOpen)
+                updateLocalMapBank();
+            else
+                relocalizeAgainstLocalMap();
+        }
+        // No-op unless relocalizeAgainstLocalMap() staged points this cycle.
+        correctSpeedBiasFromRelocalization();
+
+        updateVisualGate();
+
         // optimization
         TicToc t_solve;
         optimization();
@@ -655,8 +685,8 @@ bool Estimator::initialStructure()
         //ROS_WARN("IMU variation %f!", var);
         if(var < 0.25)
         {
-            ROS_INFO("IMU excitation not enouth!");
-            //return false;
+            ROS_INFO("IMU excitation not enough!");
+            return false;
         }
     }
     // global sfm
@@ -837,7 +867,16 @@ bool Estimator::visualInitialAlign()
 
 bool Estimator::relativePose(Matrix3d &relative_R, Vector3d &relative_T, int &l)
 {
-    // find previous frame which contians enough correspondance and parallex with newest frame
+    // Scan every candidate reference frame against the newest frame and keep
+    // the one with the strongest parallax among those that pass both the
+    // correspondence-count and parallax bars -- not just the first one that
+    // clears them. A window that barely clears the bar and one that clears
+    // it comfortably were previously treated identically.
+    int best_l = -1;
+    double best_average_parallax = 0;
+    Matrix3d best_relative_R;
+    Vector3d best_relative_T;
+
     for (int i = 0; i < WINDOW_SIZE; i++)
     {
         vector<pair<Vector3d, Vector3d>> corres;
@@ -855,15 +894,30 @@ bool Estimator::relativePose(Matrix3d &relative_R, Vector3d &relative_T, int &l)
 
             }
             average_parallax = 1.0 * sum_parallax / int(corres.size());
-            if(average_parallax * 460 > 30 && m_estimator.solveRelativeRT(corres, relative_R, relative_T))
+
+            Matrix3d candidate_R;
+            Vector3d candidate_T;
+            if(average_parallax * 460 > 30 && m_estimator.solveRelativeRT(corres, candidate_R, candidate_T))
             {
-                l = i;
-                ROS_DEBUG("average_parallax %f choose l %d and newest frame to triangulate the whole structure", average_parallax * 460, l);
-                return true;
+                if (average_parallax > best_average_parallax)
+                {
+                    best_average_parallax = average_parallax;
+                    best_l = i;
+                    best_relative_R = candidate_R;
+                    best_relative_T = candidate_T;
+                }
             }
         }
     }
-    return false;
+
+    if (best_l < 0)
+        return false;
+
+    l = best_l;
+    relative_R = best_relative_R;
+    relative_T = best_relative_T;
+    ROS_DEBUG("average_parallax %f choose l %d and newest frame to triangulate the whole structure", best_average_parallax * 460, l);
+    return true;
 }
 
 void Estimator::vector2double()
@@ -1055,6 +1109,336 @@ bool Estimator::failureDetection()
     return false;
 }
 
+void Estimator::updateVisualGate()
+{
+    int backendCount = f_manager.getFeatureCount();
+
+    if (visualGateOpen)
+    {
+        // Close instantly on a single bad frame -- no debounce. A gradual
+        // close would let exactly the kind of frame this exists to stop
+        // (e.g. a 100->4 feature-count cliff) slip through before the gate
+        // reacts.
+        if (backendCount < VISUAL_GATE_CLOSE_THRESH)
+        {
+            visualGateOpen = false;
+            visualGateReopenStreak = 0;
+            ROS_WARN("visual gate CLOSED: backend feature count %d < %d", backendCount, VISUAL_GATE_CLOSE_THRESH);
+        }
+    }
+    else
+    {
+        bool healthy = (f_manager.last_track_num >= VISUAL_GATE_REOPEN_LAST_TRACK) &&
+                       (f_manager.long_track_num >= VISUAL_GATE_REOPEN_LONG_TRACK) &&
+                       (backendCount >= VISUAL_GATE_REOPEN_BACKEND);
+
+        if (healthy)
+        {
+            visualGateReopenStreak++;
+            if (visualGateReopenStreak >= VISUAL_GATE_REOPEN_CONSECUTIVE)
+            {
+                visualGateOpen = true;
+                visualGateReopenStreak = 0;
+                ROS_WARN("visual gate REOPENED: last_track=%d long_track=%d backend=%d",
+                         f_manager.last_track_num, f_manager.long_track_num, backendCount);
+            }
+        }
+        else
+        {
+            // Any unhealthy frame resets the streak -- reopening needs N
+            // *consecutive* good frames, not N good frames total.
+            visualGateReopenStreak = 0;
+        }
+    }
+}
+
+void Estimator::updateLocalMapBank()
+{
+    if (featureTracker.cur_img.empty())
+        return;
+
+    for (auto &it_per_id : f_manager.feature)
+    {
+        if (it_per_id.estimated_depth <= 0)
+            continue;
+        if (it_per_id.used_num < 4)
+            continue;
+
+        // Only bank points actively re-observed in the current frame, using
+        // their freshest pixel location for the descriptor.
+        int last_obs_frame = it_per_id.start_frame + (int)it_per_id.feature_per_frame.size() - 1;
+        if (last_obs_frame != frame_count)
+            continue;
+
+        const FeaturePerFrame &start_obs = it_per_id.feature_per_frame[0];
+        const FeaturePerFrame &cur_obs = it_per_id.feature_per_frame.back();
+
+        Eigen::Vector3d pts_camera_start = start_obs.point * it_per_id.estimated_depth;
+        Eigen::Vector3d pts_imu_start = ric[0] * pts_camera_start + tic[0];
+        Eigen::Vector3d pts_w = Rs[it_per_id.start_frame] * pts_imu_start + Ps[it_per_id.start_frame];
+
+        std::vector<cv::KeyPoint> kps;
+        kps.emplace_back(cv::Point2f((float)cur_obs.uv.x(), (float)cur_obs.uv.y()), 31.0f);
+        cv::Mat desc;
+        localMapOrb->compute(featureTracker.cur_img, kps, desc);
+        if (desc.empty())
+            continue; // too close to image border for ORB to describe
+
+        LocalMapPoint entry;
+        entry.point_world = pts_w;
+        entry.descriptor = desc.row(0).clone();
+        localMapBank.push_back(entry);
+    }
+
+    while ((int)localMapBank.size() > LOCAL_MAP_BANK_MAX_SIZE)
+        localMapBank.pop_front();
+}
+
+void Estimator::relocalizeAgainstLocalMap()
+{
+    if ((int)localMapBank.size() < LOCAL_MAP_MIN_BANK_SIZE)
+        return;
+    if (featureTracker.cur_img.empty() || featureTracker.cur_pts.empty())
+        return;
+
+    std::vector<cv::KeyPoint> kps;
+    kps.reserve(featureTracker.cur_pts.size());
+    for (auto &pt : featureTracker.cur_pts)
+        kps.emplace_back(pt, 31.0f);
+
+    cv::Mat desc;
+    localMapOrb->compute(featureTracker.cur_img, kps, desc);
+    if (desc.empty())
+        return;
+    // compute() may drop keypoints it can't describe (too close to border);
+    // kps and desc stay mutually aligned regardless, just possibly shorter
+    // than the input -- no separate index bookkeeping needed below.
+
+    cv::Mat bankDesc((int)localMapBank.size(), 32, CV_8U);
+    for (size_t i = 0; i < localMapBank.size(); i++)
+        localMapBank[i].descriptor.copyTo(bankDesc.row((int)i));
+
+    cv::BFMatcher matcher(cv::NORM_HAMMING, /*crossCheck=*/true);
+    std::vector<cv::DMatch> matches;
+    matcher.match(desc, bankDesc, matches);
+
+    std::vector<cv::Point2f> normalizedPts; // "2D" input for solvePnPRansac -- identity K, matches initial_sfm.cpp's convention
+    std::vector<cv::Point3f> objectPts;
+    std::vector<Eigen::Vector3d> matchedWorldPts;
+    std::vector<Eigen::Vector3d> matchedRays;
+
+    for (auto &m : matches)
+    {
+        if (m.distance > LOCAL_MAP_MAX_HAMMING_DIST)
+            continue;
+
+        Eigen::Vector3d ray;
+        featureTracker.m_camera[0]->liftProjective(Eigen::Vector2d(kps[m.queryIdx].pt.x, kps[m.queryIdx].pt.y), ray);
+        if (std::abs(ray.z()) < 1e-6)
+            continue;
+        ray /= ray.z();
+
+        const Eigen::Vector3d &pw = localMapBank[m.trainIdx].point_world;
+
+        normalizedPts.emplace_back((float)ray.x(), (float)ray.y());
+        objectPts.emplace_back((float)pw.x(), (float)pw.y(), (float)pw.z());
+        matchedWorldPts.push_back(pw);
+        matchedRays.push_back(ray);
+    }
+
+    if ((int)normalizedPts.size() < LOCAL_MAP_MIN_MATCHES)
+        return;
+
+    cv::Mat K = (cv::Mat_<double>(3, 3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    cv::Mat D;
+    cv::Mat rvec, tvec;
+    std::vector<int> inliers;
+
+    bool pnp_ok = cv::solvePnPRansac(objectPts, normalizedPts, K, D, rvec, tvec,
+                                      false, 100, (float)LOCAL_MAP_PNP_REPROJ_ERROR, 0.99,
+                                      inliers, cv::SOLVEPNP_EPNP);
+
+    // EPnP's own solved pose is discarded here -- it's only used to get a
+    // robust inlier SET. The pose itself is untrustworthy on its own because
+    // a downward camera over flat ground gives a near-coplanar point set,
+    // which has a genuine two-fold pose ambiguity that EPnP isn't designed
+    // to detect or resolve -- it can silently converge to either branch.
+    if (!pnp_ok || (int)inliers.size() < LOCAL_MAP_MIN_INLIERS)
+        return; // not enough good matches -- optimizer untouched this cycle
+
+    // Re-solve on just the RANSAC-cleaned inlier set with IPPE, which is
+    // built for coplanar point sets and explicitly returns both ambiguous
+    // solutions (with their own reprojection errors) instead of silently
+    // picking one.
+    std::vector<cv::Point3f> inlierObjectPts;
+    std::vector<cv::Point2f> inlierNormalizedPts;
+    std::vector<Eigen::Vector3d> inlierWorldPts;
+    std::vector<Eigen::Vector3d> inlierRays;
+    for (int idx : inliers)
+    {
+        inlierObjectPts.push_back(objectPts[idx]);
+        inlierNormalizedPts.push_back(normalizedPts[idx]);
+        inlierWorldPts.push_back(matchedWorldPts[idx]);
+        inlierRays.push_back(matchedRays[idx]);
+    }
+
+    std::vector<cv::Mat> rvecs, tvecs;
+    cv::Mat reprojErrors;
+    int nSolutions = cv::solvePnPGeneric(inlierObjectPts, inlierNormalizedPts, K, D,
+                                          rvecs, tvecs, false, cv::SOLVEPNP_IPPE,
+                                          cv::noArray(), cv::noArray(), reprojErrors);
+
+    bool usedFallback = false;
+    if (nSolutions <= 0)
+    {
+        // IPPE's own internal coplanarity check refused the inlier set --
+        // not necessarily a bad sign, a scene that isn't tightly planar
+        // doesn't have the two-fold ambiguity IPPE exists to resolve in the
+        // first place. Fall back to the EPnP pose already computed above
+        // (previously discarded) rather than dropping this cycle outright --
+        // the jump gate below still protects it either way.
+        rvecs.clear();
+        tvecs.clear();
+        rvecs.push_back(rvec);
+        tvecs.push_back(tvec);
+        nSolutions = 1;
+        usedFallback = true;
+    }
+
+    // Predicted camera pose this cycle, from the IMU-propagated body pose
+    // already sitting in Ps[frame_count]/Rs[frame_count] before this frame's
+    // optimization() call -- the only independent reference available to
+    // pick the correct branch (or reject both).
+    Eigen::Vector3d predicted_P_cam = Rs[frame_count] * tic[0] + Ps[frame_count];
+
+    double bestDist = std::numeric_limits<double>::max();
+    int bestIdx = -1;
+    for (int i = 0; i < nSolutions; i++)
+    {
+        cv::Mat R_cv;
+        cv::Rodrigues(rvecs[i], R_cv);
+        Eigen::Matrix3d R_cam_w;
+        cv::cv2eigen(R_cv, R_cam_w);
+        Eigen::Vector3d t_cam_w(tvecs[i].at<double>(0), tvecs[i].at<double>(1), tvecs[i].at<double>(2));
+
+        // PnP convention: pts_camera = R_cam_w * pts_world + t_cam_w
+        Eigen::Vector3d candidate_P_cam = -R_cam_w.transpose() * t_cam_w;
+        double dist = (candidate_P_cam - predicted_P_cam).norm();
+        if (dist < bestDist)
+        {
+            bestDist = dist;
+            bestIdx = i;
+        }
+    }
+
+    // Jump gate: reject outright if even the closer of the (up to two)
+    // disambiguated branches -- or the EPnP fallback pose -- still disagrees
+    // with the IMU-propagated prediction by more than a physically
+    // reasonable bound. Catches the case where the inlier set itself was
+    // bad, not just the branch choice.
+    if (bestIdx < 0 || bestDist > LOCAL_MAP_JUMP_GATE_M)
+    {
+        ROS_WARN("local map relocalization: rejected (%s), best candidate %.2fm from prediction (gate %.2fm)",
+                 usedFallback ? "EPnP fallback" : "IPPE", bestDist, LOCAL_MAP_JUMP_GATE_M);
+        return;
+    }
+
+    // Both candidates (IPPE branches, or the single EPnP fallback) were fit
+    // to the same inlier correspondence set -- disambiguation only chose
+    // which POSE to trust as a sanity check, the factor points fed to the
+    // optimizer are the same inliers either way.
+    for (size_t i = 0; i < inlierWorldPts.size(); i++)
+        localMapFactorPoints.emplace_back(inlierWorldPts[i], inlierRays[i]);
+
+    ROS_WARN("local map relocalization: %d/%d inliers, %s branch %d/%d selected (%.2fm from prediction), anchoring frame %d",
+             (int)inliers.size(), (int)normalizedPts.size(), usedFallback ? "EPnP-fallback" : "IPPE",
+             bestIdx + 1, nSolutions, bestDist, frame_count);
+}
+
+void Estimator::correctSpeedBiasFromRelocalization()
+{
+    // Nothing to do unless this cycle actually produced accepted
+    // relocalization matches, and there's a previous window frame plus a
+    // real IMU segment connecting it to frame_count to anchor against.
+    if (!USE_IMU || frame_count < 1 || localMapFactorPoints.empty())
+        return;
+    if (!pre_integrations[frame_count] || pre_integrations[frame_count]->sum_dt > 10.0)
+        return;
+
+    int i = frame_count - 1;
+
+    double pose_i[SIZE_POSE];
+    double speedbias_i[SIZE_SPEEDBIAS];
+    double pose_j[SIZE_POSE];
+    double speedbias_j[SIZE_SPEEDBIAS];
+    double ex_pose[SIZE_POSE];
+
+    pose_i[0] = Ps[i].x(); pose_i[1] = Ps[i].y(); pose_i[2] = Ps[i].z();
+    Quaterniond qi{Rs[i]};
+    pose_i[3] = qi.x(); pose_i[4] = qi.y(); pose_i[5] = qi.z(); pose_i[6] = qi.w();
+    speedbias_i[0] = Vs[i].x();  speedbias_i[1] = Vs[i].y();  speedbias_i[2] = Vs[i].z();
+    speedbias_i[3] = Bas[i].x(); speedbias_i[4] = Bas[i].y(); speedbias_i[5] = Bas[i].z();
+    speedbias_i[6] = Bgs[i].x(); speedbias_i[7] = Bgs[i].y(); speedbias_i[8] = Bgs[i].z();
+
+    pose_j[0] = Ps[frame_count].x(); pose_j[1] = Ps[frame_count].y(); pose_j[2] = Ps[frame_count].z();
+    Quaterniond qj{Rs[frame_count]};
+    pose_j[3] = qj.x(); pose_j[4] = qj.y(); pose_j[5] = qj.z(); pose_j[6] = qj.w();
+    speedbias_j[0] = Vs[frame_count].x();  speedbias_j[1] = Vs[frame_count].y();  speedbias_j[2] = Vs[frame_count].z();
+    speedbias_j[3] = Bas[frame_count].x(); speedbias_j[4] = Bas[frame_count].y(); speedbias_j[5] = Bas[frame_count].z();
+    speedbias_j[6] = Bgs[frame_count].x(); speedbias_j[7] = Bgs[frame_count].y(); speedbias_j[8] = Bgs[frame_count].z();
+
+    ex_pose[0] = tic[0].x(); ex_pose[1] = tic[0].y(); ex_pose[2] = tic[0].z();
+    Quaterniond qex{ric[0]};
+    ex_pose[3] = qex.x(); ex_pose[4] = qex.y(); ex_pose[5] = qex.z(); ex_pose[6] = qex.w();
+
+    ceres::Problem problem;
+    ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
+
+    // frame_count-1 is the trusted anchor -- held fixed. frame_count's pose
+    // AND speed/bias are free, unlike the main optimization()'s Part 3 block
+    // which only ever frees Pose/Ex_Pose for these same points.
+    problem.AddParameterBlock(pose_i, SIZE_POSE, new PoseLocalParameterization());
+    problem.AddParameterBlock(speedbias_i, SIZE_SPEEDBIAS);
+    problem.SetParameterBlockConstant(pose_i);
+    problem.SetParameterBlockConstant(speedbias_i);
+
+    problem.AddParameterBlock(pose_j, SIZE_POSE, new PoseLocalParameterization());
+    problem.AddParameterBlock(speedbias_j, SIZE_SPEEDBIAS);
+
+    // Extrinsics held fixed here -- a handful of relocalization points is
+    // not enough to also safely re-fit ric/tic in the same tiny solve.
+    problem.AddParameterBlock(ex_pose, SIZE_POSE, new PoseLocalParameterization());
+    problem.SetParameterBlockConstant(ex_pose);
+
+    IMUFactor *imu_factor = new IMUFactor(pre_integrations[frame_count]);
+    problem.AddResidualBlock(imu_factor, NULL, pose_i, speedbias_i, pose_j, speedbias_j);
+
+    for (auto &lm : localMapFactorPoints)
+    {
+        ProjectionFixedPointFactor *f = new ProjectionFixedPointFactor(lm.first, lm.second);
+        problem.AddResidualBlock(f, loss_function, pose_j, ex_pose);
+    }
+
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.max_num_iterations = 8;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+
+    // Feed the correction back as this cycle's Ps/Rs/Vs/Bas/Bgs[frame_count]
+    // -- vector2double() inside the main optimization() call right after
+    // this reads from these arrays, so it starts from this bias-aware
+    // estimate instead of the raw IMU-only propagation.
+    Ps[frame_count] = Eigen::Vector3d(pose_j[0], pose_j[1], pose_j[2]);
+    Rs[frame_count] = Eigen::Quaterniond(pose_j[6], pose_j[3], pose_j[4], pose_j[5]).normalized().toRotationMatrix();
+    Vs[frame_count] = Eigen::Vector3d(speedbias_j[0], speedbias_j[1], speedbias_j[2]);
+    Bas[frame_count] = Eigen::Vector3d(speedbias_j[3], speedbias_j[4], speedbias_j[5]);
+    Bgs[frame_count] = Eigen::Vector3d(speedbias_j[6], speedbias_j[7], speedbias_j[8]);
+
+    ROS_WARN("visual gate: bias-aware reloc solve ran on %d point(s), |Ba|=%.4f |Bg|=%.4f",
+             (int)localMapFactorPoints.size(), Bas[frame_count].norm(), Bgs[frame_count].norm());
+}
+
 void Estimator::optimization()
 {
     TicToc t_whole, t_prepare;
@@ -1068,7 +1452,7 @@ void Estimator::optimization()
     //ceres::LossFunction* loss_function = new ceres::HuberLoss(1.0);
     for (int i = 0; i < frame_count + 1; i++)
     {
-        ceres::LocalParameterization *local_parameterization = new PoseLocalParameterization();
+        ceres::Manifold *local_parameterization = new PoseLocalParameterization();
         problem.AddParameterBlock(para_Pose[i], SIZE_POSE, local_parameterization);
         if(USE_IMU)
             problem.AddParameterBlock(para_SpeedBias[i], SIZE_SPEEDBIAS);
@@ -1078,7 +1462,7 @@ void Estimator::optimization()
 
     for (int i = 0; i < NUM_OF_CAM; i++)
     {
-        ceres::LocalParameterization *local_parameterization = new PoseLocalParameterization();
+        ceres::Manifold *local_parameterization = new PoseLocalParameterization();
         problem.AddParameterBlock(para_Ex_Pose[i], SIZE_POSE, local_parameterization);
         if ((ESTIMATE_EXTRINSIC && frame_count == WINDOW_SIZE && Vs[0].norm() > 0.2) || openExEstimation)
         {
@@ -1132,6 +1516,8 @@ void Estimator::optimization()
         for (auto &it_per_frame : it_per_id.feature_per_frame)
         {
             imu_j++;
+            if (it_per_frame.gated)
+                continue;
             if (imu_i != imu_j)
             {
                 Vector3d pts_j = it_per_frame.point;
@@ -1159,6 +1545,17 @@ void Estimator::optimization()
             }
             f_m_cnt++;
         }
+    }
+
+    // Part 3: anchor factors from a successful local-map relocalization this
+    // cycle (see relocalizeAgainstLocalMap()). Added only here, in the live
+    // solve -- deliberately never mirrored into the MARGIN_OLD reconstruction
+    // loop below -- so these residuals affect this cycle's solve only and
+    // are forgotten next cycle, never baked into the marginalization prior.
+    for (auto &lm : localMapFactorPoints)
+    {
+        ProjectionFixedPointFactor *f = new ProjectionFixedPointFactor(lm.first, lm.second);
+        problem.AddResidualBlock(f, loss_function, para_Pose[frame_count], para_Ex_Pose[0]);
     }
 
     ROS_DEBUG("visual measurement count: %d", f_m_cnt);
@@ -1194,6 +1591,29 @@ void Estimator::optimization()
 
     double2vector();
     //printf("frame_count: %d \n", frame_count);
+
+    static auto last_bias_print = std::chrono::steady_clock::now();
+
+    const auto now = std::chrono::steady_clock::now();
+    const double elapsed =
+        std::chrono::duration<double>(now - last_bias_print).count();
+
+    if (elapsed >= 1.0)
+    {
+        std::cout << std::fixed << std::setprecision(6)
+                  << "\n========== VINS STATE ==========\n"
+                  << "Ba [m/s^2] : " << Bas[WINDOW_SIZE].transpose()
+                  << " | norm = " << Bas[WINDOW_SIZE].norm() << "\n"
+                  << "Bg [rad/s]: " << Bgs[WINDOW_SIZE].transpose()
+                  << " | norm = " << Bgs[WINDOW_SIZE].norm() << "\n"
+                  << "Vel [m/s] : " << Vs[WINDOW_SIZE].transpose()
+                  << " | norm = " << Vs[WINDOW_SIZE].norm() << "\n"
+                  << "Gravity   : " << g.transpose()
+                  << " | norm = " << g.norm() << "\n"
+                  << "===============================\n";
+
+        last_bias_print = now;
+    }
 
     if(frame_count < WINDOW_SIZE)
         return;
@@ -1252,6 +1672,8 @@ void Estimator::optimization()
                 for (auto &it_per_frame : it_per_id.feature_per_frame)
                 {
                     imu_j++;
+                    if (it_per_frame.gated)
+                        continue;
                     if(imu_i != imu_j)
                     {
                         Vector3d pts_j = it_per_frame.point;

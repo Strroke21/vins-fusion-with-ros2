@@ -63,6 +63,39 @@ cv::Mat getImageFromMsg(const sensor_msgs::msg::Image::ConstPtr &img_msg)
         img.encoding = "mono8";
         ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::MONO8);
     }
+
+    else if (img_msg->encoding == "uyvy" || img_msg->encoding == "UYVY")
+        {
+            sensor_msgs::msg::Image img;
+            img.header = img_msg->header;
+            img.height = img_msg->height;
+            img.width = img_msg->width;
+            img.is_bigendian = img_msg->is_bigendian;
+
+            // UYVY has 2 bytes per pixel
+            img.encoding = sensor_msgs::image_encodings::MONO8;
+            img.step = img.width;
+            img.data.resize(img.height * img.step);
+
+            for (size_t y = 0; y < img.height; ++y)
+            {
+                const uint8_t* src = img_msg->data.data() + y * img_msg->step;
+                uint8_t* dst = img.data.data() + y * img.step;
+
+                for (size_t x = 0; x < img.width; ++x)
+                {
+                    // UYVY: U Y V Y
+                    // Y is at byte positions 1, 3, 5, ...
+                    dst[x] = src[2 * x + 1];
+                }
+            }
+
+            ptr = cv_bridge::toCvCopy(
+                img,
+                sensor_msgs::image_encodings::MONO8
+            );
+        }
+
     else
         ptr = cv_bridge::toCvCopy(img_msg, sensor_msgs::image_encodings::MONO8);
 
@@ -105,11 +138,12 @@ void sync_process()
                     img0_buf.pop();
                     image1 = getImageFromMsg(img1_buf.front());
                     img1_buf.pop();
-                    //printf("find img0 and img1\n");
-
-                    // std::cout << std::fixed << img0_buf.front()->header.stamp.sec + img0_buf.front()->header.stamp.nanosec * (1e-9) << std::endl;
-                    // assert(0);
-                    
+                    // Drop old buffered frames to keep up with real-time
+                    while(img0_buf.size() > 1 && img1_buf.size() > 1)
+                    {
+                        img0_buf.pop();
+                        img1_buf.pop();
+                    }
                 }
             }
             m_buf.unlock();
@@ -128,6 +162,11 @@ void sync_process()
                 header = img0_buf.front()->header;
                 image = getImageFromMsg(img0_buf.front());
                 img0_buf.pop();
+                // Drop old buffered frames to keep up with real-time
+                while(img0_buf.size() > 1)
+                {
+                    img0_buf.pop();
+                }
             }
             m_buf.unlock();
             if(!image.empty())
@@ -243,16 +282,17 @@ int main(int argc, char **argv)
 	auto n = rclcpp::Node::make_shared("vins_estimator");
     // ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
 
-    if(argc != 2)
+    auto non_ros_args = rclcpp::remove_ros_arguments(argc, argv);
+    if(non_ros_args.size() != 2)
     {
-        printf("please intput: rosrun vins vins_node [config file] \n"
-               "for example: rosrun vins vins_node "
+        printf("please intput: ros2 run vins vins_node [config file] \n"
+               "for example: ros2 run vins vins_node "
                "~/catkin_ws/src/VINS-Fusion/config/euroc/euroc_stereo_imu_config.yaml \n");
         return 1;
     }
 
-    string config_file = argv[1];
-    printf("config_file: %s\n", argv[1]);
+    string config_file = non_ros_args[1];
+    printf("config_file: %s\n", config_file.c_str());
 
     readParameters(config_file);
     estimator.setParameter();
@@ -268,24 +308,29 @@ int main(int argc, char **argv)
 
     rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr sub_imu = NULL;
     if(USE_IMU)
+    
     {
-        sub_imu = n->create_subscription<sensor_msgs::msg::Imu>(IMU_TOPIC, rclcpp::QoS(rclcpp::KeepLast(2000)), imu_callback);
+    	//auto qos = rclcpp::QoS(rclcpp::KeepLast(2000)).best_effort();
+        sub_imu = n->create_subscription<sensor_msgs::msg::Imu>(IMU_TOPIC, rclcpp::SensorDataQoS().keep_last(2000), imu_callback);
+        //sub_imu = n->create_subscription<sensor_msgs::msg::Imu>(IMU_TOPIC, qos, imu_callback);
     }
     auto sub_feature = n->create_subscription<sensor_msgs::msg::PointCloud>("/feature_tracker/feature", rclcpp::QoS(rclcpp::KeepLast(2000)), feature_callback);
-    auto sub_img0 = n->create_subscription<sensor_msgs::msg::Image>(IMAGE0_TOPIC, rclcpp::QoS(rclcpp::KeepLast(100)), img0_callback);
-    
+    auto sub_img0 = n->create_subscription<sensor_msgs::msg::Image>(IMAGE0_TOPIC, rclcpp::SensorDataQoS(), img0_callback);
+
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_img1 = NULL;
     if(STEREO)
     {
-        sub_img1 = n->create_subscription<sensor_msgs::msg::Image>(IMAGE1_TOPIC, rclcpp::QoS(rclcpp::KeepLast(100)), img1_callback);
+        sub_img1 = n->create_subscription<sensor_msgs::msg::Image>(IMAGE1_TOPIC, rclcpp::SensorDataQoS(), img1_callback);
     }
-    
+
     auto sub_restart = n->create_subscription<std_msgs::msg::Bool>("/vins_restart", rclcpp::QoS(rclcpp::KeepLast(100)), restart_callback);
     auto sub_imu_switch = n->create_subscription<std_msgs::msg::Bool>("/vins_imu_switch", rclcpp::QoS(rclcpp::KeepLast(100)), imu_switch_callback);
     auto sub_cam_switch = n->create_subscription<std_msgs::msg::Bool>("/vins_cam_switch", rclcpp::QoS(rclcpp::KeepLast(100)), cam_switch_callback);
 
     std::thread sync_thread{sync_process};
-    rclcpp::spin(n);
+    rclcpp::executors::MultiThreadedExecutor executor;
+    executor.add_node(n);
+    executor.spin();
 
     return 0;
 }
