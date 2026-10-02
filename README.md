@@ -6,8 +6,8 @@
 ### Prerequisites
 
 - **System**
-  - Ubuntu 22.04
-  - ROS2 Humble
+  - Ubuntu 24.04
+  - ROS2 Jazzy
 
 ### Install Ceres-Solver with CUDA
 #### Install dependencies
@@ -65,9 +65,20 @@ sudo make install
 
 ```
 
-### Install ROS2-Humble
+### Install ROS2-Jazzy
 
-https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
+```
+sudo curl -L https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+  -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | \
+sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y ros-jazzy-desktop
+
+```
 
 
 ### clone the repo
@@ -77,6 +88,8 @@ https://github.com/Strroke21/V-SLAM-with-RTABMAP-and-Realsense-D4XX
 git clone https://github.com/Strroke21/vins-fusion-with-ros2
 
 cd vins-fusion-with-ros2
+
+git checkout ros2-jazzy
 
 colcon build
 
