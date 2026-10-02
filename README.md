@@ -1,7 +1,7 @@
 
 # VINS-Fusion
 
-## VINS-Fusion with ROS2-Humble
+## VINS-Fusion with ROS2-Jazzy
 
 ### Prerequisites
 
